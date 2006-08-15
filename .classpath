@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry sourcepath="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/piccolo-1.2/src" kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/piccolo-1.2/build/piccolo.jar">
+		<attributes>
+			<attribute value="file:/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/piccolo-1.2/doc/api/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/substance-2.2/substance-src.jar" kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/substance-2.2/substance.jar">
+		<attributes>
+			<attribute value="jar:file:/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/substance-2.2/substance-docs.jar!/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/piccolo-1.2/src" kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/piccolo-1.2/build/piccolox.jar">
+		<attributes>
+			<attribute value="file:/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/piccolo-1.2/doc/api/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/jfreereport-0.8.7-5/source" kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/jfreereport-0.8.7-5/jfreereport-0.8.7-5.jar">
+		<attributes>
+			<attribute value="http://www.jfree.org/jfreereport/api/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/jcommon-1.0.4/jcommon-1.0.4.jar"/>
+	<classpathentry sourcepath="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/xpp3-1.1.3.4.O/src" kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/xpp3-1.1.3.4.O/xpp3-1.1.3.4.O.jar">
+		<attributes>
+			<attribute value="file:/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/xpp3-1.1.3.4.O/doc/api/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/xstream-1.1.3/src" kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/xstream-1.1.3/xstream-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/clinthill/Development/Saguaro Stoneworks 2006/External Libraries/jcommon-1.0.4/jcommon-xml-1.0.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

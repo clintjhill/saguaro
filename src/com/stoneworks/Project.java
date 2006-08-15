@@ -1,0 +1,91 @@
+/**
+ * 
+ */
+package com.stoneworks;
+
+
+
+import java.io.FileNotFoundException;
+
+
+/**
+ * @author clinthill
+ *
+ */
+public class Project {
+
+	private CutList cutList = null;
+	private BrickCanvas brickCanvas = null;
+	private String projectName = null;
+	private String projectClient = null;
+	
+	/**
+	 * 
+	 */
+	public Project() {
+	}
+
+	public void save(String filePath) {
+		try {
+			java.io.FileOutputStream fileOut = new java.io.FileOutputStream(filePath);
+			com.thoughtworks.xstream.XStream xml = new com.thoughtworks.xstream.XStream();
+			xml.registerConverter(new com.stoneworks.BrickCanvasConverter());
+			xml.registerConverter(new com.stoneworks.BrickConverter());
+			xml.registerConverter(new com.stoneworks.BackgroundImageConverter());
+			xml.toXML(this, fileOut);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void open(String filePath) {
+		try {
+			java.io.FileInputStream fileIn = new java.io.FileInputStream(filePath);
+			com.thoughtworks.xstream.XStream xml = new com.thoughtworks.xstream.XStream();
+			xml.registerConverter(new com.stoneworks.BrickCanvasConverter());
+			xml.registerConverter(new com.stoneworks.BrickConverter());
+			xml.registerConverter(new com.stoneworks.BackgroundImageConverter());
+			Project project = (Project)xml.fromXML(fileIn);
+			this.brickCanvas = project.brickCanvas;
+			this.cutList = project.cutList;
+			this.projectClient = project.projectClient;
+			this.projectName = project.projectName;
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public CutList getCutList() {
+		return cutList;
+	}
+
+	public void setCutList(CutList cl) {
+		this.cutList = cl;
+	}
+
+	public String getProjectClient() {
+		return projectClient;
+	}
+
+	public void setProjectClient(String projectClient) {
+		this.projectClient = projectClient;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public BrickCanvas getBrickCanvas() {
+		return brickCanvas;
+	}
+
+	public void setBrickCanvas(BrickCanvas brickCanvas) {
+		this.brickCanvas = brickCanvas;
+	}
+}

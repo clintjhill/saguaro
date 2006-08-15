@@ -1,0 +1,16 @@
+1. [Done]Create the ability to pass color to the Brick Cut List ListCellRenderer
+2. [Done]Pass only Brick types to ListCellRenderer
+3. [Done]Drag-n-Drop from Cut List to BrickCanvas
+4. Go through and put ToolTips on every button for feature revealment
+5. [Done]Guard the CutList so duplicates don't get entered
+6. [Done]Add constant validation against dups in the CutList compared to the BrickCanvas
+7. [DENIED]Add ghost pane for drag and drop 
+8. [Done] Add location setting for drag and drop
+9. Find a better method of scaling bricks for print (currently using 12 to set the scale())
+10. Find a way to display orientation of brick from original shape
+11. Implement a hit-collision detection to prevent overlapping bricks
+12. [Done]Make the Canvas output an image for the Design Review Report
+13. [Done]If BrickTemplateElement works remove Print from Brick class
+14. [Done]Implement a Save feature that saves a Project class (canvas, name, client)
+15. [Done]Show angle changes on Cutter 
+16. Change Cutter to be a double sided cutter
