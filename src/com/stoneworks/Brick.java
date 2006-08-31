@@ -128,8 +128,12 @@ public class Brick extends PPath implements Cuttable, Transferable {
 				break;
 			case PathIterator.SEG_CLOSE:
 				double finalDistance = firstPoint.distance(origination);
-				description = description.concat(StandardMeasurement
-						.createForInches(finalDistance).toString());
+				if(finalDistance > 0) {
+					description = description.concat(StandardMeasurement
+							.createForInches(finalDistance).toString());
+				} else {
+					description = description.substring(0, description.lastIndexOf(","));
+				}
 				break;
 			}
 			path.next();

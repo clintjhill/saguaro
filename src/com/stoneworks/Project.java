@@ -18,6 +18,7 @@ public class Project {
 	private BrickCanvas brickCanvas = null;
 	private String projectName = null;
 	private String projectClient = null;
+	private String filePath = null;
 	
 	/**
 	 * 
@@ -25,7 +26,11 @@ public class Project {
 	public Project() {
 	}
 
-	public void save(String filePath) {
+	public void save(String path) {
+		this.filePath = path;
+		this.save();
+	}
+	public void save() {
 		try {
 			java.io.FileOutputStream fileOut = new java.io.FileOutputStream(filePath);
 			com.thoughtworks.xstream.XStream xml = new com.thoughtworks.xstream.XStream();
@@ -39,8 +44,9 @@ public class Project {
 		}
 		
 	}
-	public void open(String filePath) {
+	public void open(String path) {
 		try {
+			this.filePath = path;
 			java.io.FileInputStream fileIn = new java.io.FileInputStream(filePath);
 			com.thoughtworks.xstream.XStream xml = new com.thoughtworks.xstream.XStream();
 			xml.registerConverter(new com.stoneworks.BrickCanvasConverter());
@@ -87,5 +93,9 @@ public class Project {
 
 	public void setBrickCanvas(BrickCanvas brickCanvas) {
 		this.brickCanvas = brickCanvas;
+	}
+	
+	public boolean hasFilePath() {
+		return this.filePath != null && this.filePath.length() > 0;
 	}
 }

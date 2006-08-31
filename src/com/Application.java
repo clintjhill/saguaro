@@ -81,6 +81,8 @@ public class Application {
 	private JLabel aboutVersionLabel = null;
 
 	private ProjectManager projectManager = null;
+	
+	private Project project = new Project();  //  @jve:decl-index=0:
 
 	private BrickManager brickManager = null;
 
@@ -337,13 +339,16 @@ public class Application {
 					JFileChooser chooser = new JFileChooser();
 					int option = chooser.showOpenDialog(Application.this.getProjectManager());
 					if(option == JFileChooser.APPROVE_OPTION) {
-						Project project = new Project();
 						project.open(chooser.getSelectedFile().getPath());
 						getBrickManager().setCutList(project.getCutList());
 						getBrickCanvasManager().setBrickCanvas(project.getBrickCanvas());
 						getProjectManager().setBrickCanvas(project.getBrickCanvas());
 						getProjectManager().setClientName(project.getProjectClient());
 						getProjectManager().setProjectName(project.getProjectName());
+						@SuppressWarnings("unused")
+						CutSynchronizer cutSynch = new CutSynchronizer(
+								getBrickCanvasManager().getBrickCanvas(), getBrickManager()
+										.getCutList());
 					}
 				}
 			});
@@ -363,15 +368,18 @@ public class Application {
 					Event.CTRL_MASK, true));
 			saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JFileChooser chooser = new JFileChooser();
-					int option = chooser.showSaveDialog(Application.this.getProjectManager());
-					if(option == JFileChooser.APPROVE_OPTION) {
-						Project project = new Project();
-						project.setBrickCanvas(getBrickCanvasManager().getBrickCanvas());
-						project.setCutList(getBrickManager().getCutList());
-						project.setProjectClient(getProjectManager().getClientName());
-						project.setProjectName(getProjectManager().getProjectName());
-						project.save(chooser.getSelectedFile().getPath());
+					project.setBrickCanvas(getBrickCanvasManager().getBrickCanvas());
+					project.setCutList(getBrickManager().getCutList());
+					project.setProjectClient(getProjectManager().getClientName());
+					project.setProjectName(getProjectManager().getProjectName());
+					if(!project.hasFilePath()) {
+						JFileChooser chooser = new JFileChooser();
+						int option = chooser.showSaveDialog(Application.this.getProjectManager());
+						if(option == JFileChooser.APPROVE_OPTION) {
+							project.save(chooser.getSelectedFile().getPath());
+						}
+					} else {
+						project.save();
 					}
 				}
 			});

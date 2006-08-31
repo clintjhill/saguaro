@@ -64,7 +64,8 @@ public class StandardMeasurement {
 	 * @return StandardMeasurement
 	 */
 	public static StandardMeasurement createForFeet(double feet) {
-		return new StandardMeasurement((feet / 12)/ 6);
+		StandardMeasurement standard = new StandardMeasurement(feet/ 6);
+		return standard;
 	}
 
 	/**
@@ -202,9 +203,9 @@ public class StandardMeasurement {
 	public String toString() {
 		String description = "";
 		if(this.feet <= 0) {
-			description = this.inches.toString();
+			description = this.inches.toString() + "''";
 		} else {
-			description = String.valueOf(this.feet) + " " + this.inches.toString();
+			description = String.valueOf(this.feet) + "' " + this.inches.toString() + "''";
 		}
 		return description;
 	}

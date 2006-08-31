@@ -64,6 +64,8 @@ class BrickInputEventHandler extends PBasicInputEventHandler {
 //			popUp.show(event.getSourceSwingEvent().getComponent(),
 //					(int) event.getPosition().getX(), (int) event
 //							.getPosition().getY());
+//		} else {
+//			super.mousePressed(event);
 //		}
 	}
 
