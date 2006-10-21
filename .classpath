@@ -8,8 +8,7 @@
 	<classpathentry kind="lib" path="lib/piccolox.jar"/>
 	<classpathentry kind="lib" path="lib/piccolo.jar"/>
 	<classpathentry kind="lib" path="lib/jfreereport-0.8.7-5.jar"/>
-	<classpathentry kind="lib" path="lib/jcommon-xml-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/jcommon-1.0.4-junit.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-xml-1.0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
