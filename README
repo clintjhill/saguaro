@@ -1,0 +1,55 @@
+H3O Software ...reality software
+
+Saguaro Stoneworks Project
+
+
+INTRODUCTION
+Welcome to the Saguaro Stoneworks Project! This is a Java Swing application
+that allows Saguaro Stoneworks to prepare brick mosaic jobs. They wanted to
+be able to "draw" out the project and be given printable inventory reports.
+
+REQUIREMENTS
+To run this project you will need Java SE 5 SDK. As well there are jar files 
+included in this project for GUI Look and Feel as well as reporting. Here are
+the URL's for all of these requirements.
+
+	Java SDK:
+	No J2EE classes were used in the building of this project so only the desktop
+	or Standard SDK is needed.
+	http://java.sun.com/javase/downloads/index.jsp
+
+	XStream:
+	This is an xml serialization library used to save files for the project. This
+	jar will also have dependencies on an xml parser. Xpp3 was chosen for this 
+	project - see this website for more information.
+	http://xstream.codehaus.org/index.html
+	
+	Piccolo:
+	This is a jar library that provides all of the zoom and pan abilities 
+	of the drawing space.
+	http://www.cs.umd.edu/hcil/jazz/index.shtml
+	
+	JFreeReport:
+	This library is the backbone of all of the reports for this project.
+	http://www.jfree.org/jfreereport/index.php
+	
+	JCommon:
+	This library is required by JFreeReport.
+	http://www.jfree.org/jcommon/index.php
+	
+	(Optional) Substance:
+	This is the Java LAF used. 
+	https://substance.dev.java.net/
+
+
+MORE INFORMATION
+This project was developed using the Eclipse IDE version 3.2. 
+This project was developed initially on a IBM Thinkpad T42p Windows XP machine 
+using Java 1.4.2 but is now developed on a MacBook Pro machine using Java 1.5.0. 
+Great care was taken to insure the portability of this project, and as such no
+bin files are provided (no build files are in SVN). All of the other jar files 
+are in the /lib folder and added to the .classpath file for the Eclipse project.
+
+INSTALLATION NOTES
+Checkout the SVN /trunk using Eclipse with the Subclipse plugin. From there you
+should have the jar files necessary to run this application. 
