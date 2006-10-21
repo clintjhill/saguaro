@@ -13,4 +13,7 @@
 13. [Done]If BrickTemplateElement works remove Print from Brick class
 14. [Done]Implement a Save feature that saves a Project class (canvas, name, client)
 15. [Done]Show angle changes on Cutter 
-16. Change Cutter to be a double sided cutter
+16. [DENIED]Change Cutter to be a double sided cutter
+17. Add Undo features for cutting bricks
+18. Add selection features (allow to select brick for cutting,undo,removal)
+19. Add right click ability on Bricks for cutting,undo,removal features.
