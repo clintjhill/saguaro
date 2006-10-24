@@ -4,6 +4,8 @@
 package com.stoneworks.gui;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -49,6 +51,13 @@ public class BirdsEyeView extends PCanvas implements PropertyChangeListener {
 	 */
 	public BirdsEyeView() {
 
+		this.addMouseMotionListener(new MouseMotionAdapter() {
+
+			public void mouseMoved(MouseEvent e) {
+				setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+			}
+			
+		});
 		// create the PropertyChangeListener for listening to the viewed
 		// canvas
 		changeListener = new PropertyChangeListener() {

@@ -38,7 +38,7 @@ public class BrickCanvasConverter implements Converter {
 		context.convertAnother(canvas.getBackgroundImage());
 		writer.endNode();
 		writer.startNode("bricksOnCanvas");
-		for(Object obj : canvas.getLayer().getChildrenReference()) {
+		for(Object obj : canvas.getBricks()) {
 			if(obj instanceof Brick) {
 				writer.startNode(obj.getClass().getName());
 				context.convertAnother((Brick)obj);
@@ -53,7 +53,7 @@ public class BrickCanvasConverter implements Converter {
 	 */
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext context) {
-		BrickCanvas canvas = new BrickCanvas();
+		BrickCanvas canvas = BrickCanvas.getInstance();
 		while(reader.hasMoreChildren()) {
 			reader.moveDown();
 			if(reader.getNodeName().equals("canvasBackgroundImage")) {

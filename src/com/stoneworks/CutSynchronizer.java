@@ -21,19 +21,26 @@ public class CutSynchronizer {
 	public CutSynchronizer(BrickCanvas canvas, CutList cutList) {
 		this.canvas = canvas;
 		this.cutList = cutList;
-		this.hearingList = new java.util.ArrayList<Brick>();
 		this.canvas.getLayer().addPropertyChangeListener(
 				PNode.PROPERTY_CHILDREN, new PropertyChangeListener() {
 
 					public void propertyChange(PropertyChangeEvent evt) {
-						hearingList.clear();
-						for (Object node : getCanvas().getLayer()
-								.getChildrenReference()) {
+						for (Object node : getCanvas().getBricks()) {
 							if (node instanceof Brick) {
 								Brick brick = (Brick) node;
-								brick.addPropertyChangeListener(
-										PPath.PROPERTY_PATH, new CutListener());
-								hearingList.add(brick);
+								boolean doesntHaveOne = true;
+								for (PropertyChangeListener pl : brick
+										.getListenerList().getListeners(
+												PropertyChangeListener.class)) {
+									if (pl instanceof CutListener)
+										doesntHaveOne = false;
+								}
+								if (brick.getListenerList().getListenerCount() == 0
+										|| doesntHaveOne) {
+									brick.addPropertyChangeListener(
+											PPath.PROPERTY_PATH,
+											new CutListener());
+								}
 							}
 						}
 					}
@@ -61,16 +68,13 @@ public class CutSynchronizer {
 
 	private CutList cutList = null;
 
-	private java.util.ArrayList<Brick> hearingList = null;
-
 	private class CutListener implements PropertyChangeListener {
 
 		public void propertyChange(final PropertyChangeEvent evt) {
 			Brick brick = (Brick) evt.getSource();
 			if (evt.getPropertyName().equals(PPath.PROPERTY_PATH)) {
 				if (!getCutList().contains(brick)) {
-					getCutList().addElement(
-							new Brick(brick.getCuttable(), brick.getColor()));
+					getCutList().addElement(brick);
 				}
 			}
 		}

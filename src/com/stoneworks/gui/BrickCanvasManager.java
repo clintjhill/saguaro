@@ -87,7 +87,7 @@ public class BrickCanvasManager extends JPanel {
 	 */
 	public BrickCanvas getBrickCanvas() {
 		if (brickCanvas == null) {
-			brickCanvas = new BrickCanvas();
+			brickCanvas = BrickCanvas.getInstance();
 			brickCanvas.setCutTool(new com.stoneworks.Cutter(brickCanvas));
 		}
 		return brickCanvas;

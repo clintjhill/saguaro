@@ -110,12 +110,6 @@ public class Brick extends PPath implements Cuttable, Transferable {
 				origination = new Point2D.Float(x, y);
 				firstPoint = origination;
 				break;
-			case PathIterator.SEG_QUADTO:
-
-				break;
-			case PathIterator.SEG_CUBICTO:
-
-				break;
 			case PathIterator.SEG_LINETO:
 				// TODO: Check this for feet/inches values ... could be trouble
 				// later
@@ -144,7 +138,9 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	public Object getTransferData(DataFlavor flavor)
 			throws UnsupportedFlavorException, IOException {
 		if (this.isDataFlavorSupported(flavor)) {
-			return new Brick(this.getCuttable(), this.color);
+			Brick copy = new Brick((Shape)this.getPathReference().clone());
+			copy.setColor(this.color);
+			return copy;
 		} else {
 			return null;
 		}
@@ -185,30 +181,4 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	}
 
 	private java.awt.Color color = null;
-
-	@Override
-	public int hashCode() {
-		final int PRIME = 31;
-		int result = 1;
-		result = PRIME * result + ((color == null) ? 0 : color.hashCode());
-		result = PRIME
-				* result
-				+ ((this.getPathReference() == null) ? 0 : this
-						.getPathReference().hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final Brick other = (Brick) obj;
-		return (color.equals(other.color) && getDescription().equals(
-				other.getDescription()));
-	}
-	
 }

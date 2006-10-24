@@ -78,7 +78,7 @@ public class Cutter extends PPath {
 				if(event.getModifiersEx() == java.awt.event.KeyEvent.CTRL_DOWN_MASK ||
 						event.getModifiersEx() == java.awt.event.KeyEvent.META_DOWN_MASK ||
 						event.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-					for(Object obj : canvas.getLayer().getChildrenReference()) {
+					for(Object obj : canvas.getBricks()) {
 						if(obj instanceof Brick) {
 							Brick brick = (Brick)obj;
 							java.awt.geom.Area area = new java.awt.geom.Area(Cutter.this.getPathReference());

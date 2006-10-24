@@ -25,8 +25,10 @@ public final class DesignReviewTable extends AbstractTableModel {
 	 * @param c
 	 */
 	public void addCanvas(com.stoneworks.BrickCanvas c) {
-		this.canvas = new BrickCanvas();
-		for(Object obj : c.getLayer().getChildrenReference()) {
+		//FIXME: What's going on here - we accept a canvas but we don't use it?
+		//	Does the singleton remove the need for this method now?
+		this.canvas = BrickCanvas.getInstance();
+		for(Object obj : c.getBricks()) {
 			if(obj instanceof Brick) {
 				Brick b = (Brick)obj;
 				this.canvas.getLayer().addChild((Brick)b.clone());

@@ -1,5 +1,9 @@
 package com.stoneworks;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+
 import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
@@ -28,8 +32,22 @@ class BrickInputEventHandler extends PBasicInputEventHandler {
 	@Override
 	public void mouseClicked(PInputEvent event) {
 		super.mouseClicked(event);
-		PNode node = event.getPickedNode();
-		node.moveToFront();
+		if (event.getButton() == java.awt.event.MouseEvent.BUTTON3) {
+			javax.swing.JPopupMenu popUp = new javax.swing.JPopupMenu();
+			javax.swing.JMenuItem remove = new javax.swing.JMenuItem("Remove");
+			remove.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					BrickCanvas.getInstance().removeBrick(brick);
+				}
+				
+			});
+			popUp.add(remove);
+			Point2D position = event.getCamera().viewToLocal(
+					event.getPosition());
+			popUp.show(event.getSourceSwingEvent().getComponent(),
+					(int) position.getX(), (int) position.getY());
+		}
 	}
 
 	@Override
@@ -48,35 +66,12 @@ class BrickInputEventHandler extends PBasicInputEventHandler {
 	}
 
 	@Override
-	public void mousePressed(PInputEvent event) {
-		super.mousePressed(event);
-//		if (event.getButton() == java.awt.event.MouseEvent.BUTTON3) {
-//			javax.swing.JPopupMenu popUp = new javax.swing.JPopupMenu();
-//			javax.swing.JMenuItem print = new javax.swing.JMenuItem("Print");
-//			print.addActionListener(new java.awt.event.ActionListener() {
-//
-//				public void actionPerformed(ActionEvent e) { 
-//					brick.print();
-//				}
-//				
-//			});
-//			popUp.add(print);
-//			popUp.show(event.getSourceSwingEvent().getComponent(),
-//					(int) event.getPosition().getX(), (int) event
-//							.getPosition().getY());
-//		} else {
-//			super.mousePressed(event);
-//		}
-	}
-
-	@Override
 	public void mouseWheelRotated(PInputEvent event) {
 		super.mouseWheelRotated(event);
 		PNode node = event.getPickedNode();
 		double x = node.getWidth() / 2;
 		double y = node.getHeight() / 2;
-		node.rotateAboutPoint(Math.toRadians(event.getWheelRotation()), x,
-				y);
+		node.rotateAboutPoint(Math.toRadians(event.getWheelRotation()), x, y);
 	}
 
 	private java.awt.Paint currentColor = java.awt.Color.gray;

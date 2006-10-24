@@ -38,8 +38,9 @@ public class ConstructionTable extends AbstractTableModel {
 	 * @param c
 	 */
 	public void addCanvas(com.stoneworks.BrickCanvas c) {
-		this.canvas = new BrickCanvas();
-		for(Object obj : c.getLayer().getChildrenReference()) {
+		//FIXME: What's going on here - does the singleton remove the need for this method now?
+		this.canvas = BrickCanvas.getInstance();
+		for(Object obj : c.getBricks()) {
 			if(obj instanceof Brick) {
 				Brick b = (Brick)obj;
 				this.canvas.getLayer().addChild((Brick)b.clone());
@@ -75,7 +76,7 @@ public class ConstructionTable extends AbstractTableModel {
 	}
 	
 	private void getInventory(Image canvasImage) {
-		for(Object obj : this.canvas.getLayer().getChildrenReference()) {
+		for(Object obj : this.canvas.getBricks()) {
 			if(obj instanceof Brick) {
 				Brick b = (Brick)obj;
 				boolean found = false;

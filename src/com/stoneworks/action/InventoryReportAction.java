@@ -40,7 +40,7 @@ public class InventoryReportAction extends AbstractAction {
 		BrickInventoryReport report = new BrickInventoryReport();
 		
 		if (canvas != null) {
-			for (Object obj : canvas.getLayer().getChildrenReference()) {
+			for (Object obj : canvas.getBricks()) {
 				if (obj instanceof Brick) {
 					Brick brick = (Brick) obj;
 					report.getTable().addBrick(brick);

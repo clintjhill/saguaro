@@ -122,7 +122,7 @@ public class BrickTransferHandler extends TransferHandler {
 				e.printStackTrace();
 				return false;
 			}
-			canvas.getLayer().addChild(brick);
+			canvas.addBrick(brick);
 			return true;
 		}
 		return false;

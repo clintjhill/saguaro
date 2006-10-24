@@ -35,7 +35,7 @@ public class TemplateReportAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		BrickTemplateReport report = new BrickTemplateReport();
 		if (canvas != null) {
-			for (Object obj : canvas.getLayer().getChildrenReference()) {
+			for (Object obj : canvas.getBricks()) {
 				if (obj instanceof Brick) {
 					Brick brick = (Brick) obj;
 					report.getTable().addBrick(brick);

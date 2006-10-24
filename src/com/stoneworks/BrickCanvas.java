@@ -12,6 +12,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 
 import edu.umd.cs.piccolo.PCamera;
 import edu.umd.cs.piccolo.PCanvas;
@@ -36,16 +37,33 @@ public class BrickCanvas extends PCanvas {
 	 * 
 	 */
 	private static final long serialVersionUID = -5126521237548541451L;
-	static protected Line2D gridLine = new Line2D.Double();
+
+	private static BrickCanvas instance = null;
+	
+    static protected Line2D gridLine = new Line2D.Double();
+
 	static protected Stroke gridStroke = new BasicStroke(0.5F);
+
 	static protected Color gridPaint = Color.LIGHT_GRAY;
+
 	static protected double gridSpacing = 6;
+
+	/**
+	 * Returns Singleton instance of BrickCanvas
+	 * @return
+	 */
+	public static BrickCanvas getInstance() {
+		if(instance == null) {
+			instance = new BrickCanvas();
+		}
+		return instance;
+	}
 	/**
 	 * 
 	 */
-	public BrickCanvas() {
+	private BrickCanvas() {
 		this.setBackground(null);
-		
+
 		PRoot root = getRoot();
 		final PCamera camera = getCamera();
 		final PLayer gridLayer = new PLayer() {
@@ -55,7 +73,7 @@ public class BrickCanvas extends PCanvas {
 			private static final long serialVersionUID = 0L;
 
 			protected void paint(PPaintContext paintContext) {
-				// make sure grid gets drawn on snap to grid boundaries. And 
+				// make sure grid gets drawn on snap to grid boundaries. And
 				// expand a little to make sure that entire view is filled.
 				double bx = (getX() - (getX() % gridSpacing)) - gridSpacing;
 				double by = (getY() - (getY() % gridSpacing)) - gridSpacing;
@@ -83,33 +101,55 @@ public class BrickCanvas extends PCanvas {
 				}
 			}
 		};
-		
-//		 replace standar layer with grid layer.
+
+		// replace standar layer with grid layer.
 		root.removeChild(camera.getLayer(0));
 		camera.removeLayer(0);
 		root.addChild(gridLayer);
 		camera.addLayer(gridLayer);
 
-		// add constrains so that grid layers bounds always match cameras view bounds. This makes 
-		// it look like an infinite grid.
-		camera.addPropertyChangeListener(PNode.PROPERTY_BOUNDS, new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				gridLayer.setBounds(camera.getViewBounds());
-			}
-		});
+		// add constrains so that grid layers bounds always match cameras view
+		// bounds. This makes it look like an infinite grid.
+		camera.addPropertyChangeListener(PNode.PROPERTY_BOUNDS,
+				new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent evt) {
+						gridLayer.setBounds(camera.getViewBounds());
+					}
+				});
 
-		camera.addPropertyChangeListener(PCamera.PROPERTY_VIEW_TRANSFORM, new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				gridLayer.setBounds(camera.getViewBounds());
-			}
-		});
+		camera.addPropertyChangeListener(PCamera.PROPERTY_VIEW_TRANSFORM,
+				new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent evt) {
+						gridLayer.setBounds(camera.getViewBounds());
+					}
+				});
 
 		gridLayer.setBounds(camera.getViewBounds());
-		
+
 		removeInputEventListener(getPanEventHandler());
-		addInputEventListener(new PDragEventHandler());
+		PDragEventHandler dragHandler = new PDragEventHandler() {
+
+			@Override
+			public void mouseDragged(PInputEvent e) {
+				PNode node = e.getPickedNode();
+				if(node instanceof Brick || node instanceof Cutter) {
+					super.mouseDragged(e);
+				}
+			}
+
+			@Override
+			public void mousePressed(PInputEvent e) {
+				PNode node = e.getPickedNode();
+				if(node instanceof Brick || node instanceof Cutter) {
+					super.mousePressed(e);
+				}
+			}
+			
+		};
+		dragHandler.setMoveToFrontOnPress(true);
+		addInputEventListener(dragHandler);
 		setTransferHandler(new com.stoneworks.BrickTransferHandler());
-		//final PCamera camera = getCamera();
+		// final PCamera camera = getCamera();
 		final PText tooltipNode = new PText();
 
 		tooltipNode.setPickable(false);
@@ -128,7 +168,7 @@ public class BrickCanvas extends PCanvas {
 				PNode n = event.getInputManager().getMouseOver()
 						.getPickedNode();
 				if (n instanceof com.stoneworks.Brick) {
-					com.stoneworks.Brick b = (com.stoneworks.Brick)n;
+					com.stoneworks.Brick b = (com.stoneworks.Brick) n;
 					String tooltipString = b.getDescription();
 					java.awt.geom.Point2D p = event.getCanvasPosition();
 
@@ -142,16 +182,17 @@ public class BrickCanvas extends PCanvas {
 			}
 		});
 	}
+
 	/**
 	 * 
 	 * @param show
 	 */
 	public void showBrickStrokes(boolean show) {
-		for(Object obj : getLayer().getChildrenReference()) {
-			if(obj instanceof Brick) {
-				Brick b = (Brick)obj;
+		for (Object obj : getBricks()) {
+			if (obj instanceof Brick) {
+				Brick b = (Brick) obj;
 				strokePaint = b.getStrokePaint();
-				if(show) {
+				if (show) {
 					b.setStrokePaint(strokePaint);
 				} else {
 					b.setStrokePaint(null);
@@ -159,28 +200,33 @@ public class BrickCanvas extends PCanvas {
 			}
 		}
 	}
-	
+
 	private Cutter cutTool = null;
+
 	private BackgroundImage backgroundImage = null;
+
 	private Paint strokePaint = null;
 
 	public BackgroundImage getBackgroundImage() {
-		if(backgroundImage == null) {
+		if (backgroundImage == null) {
 			backgroundImage = new BackgroundImage();
 		}
 		return backgroundImage;
 	}
+
 	@SuppressWarnings("unchecked")
 	public void setBackgroundImage(BackgroundImage backgroundImage) {
-		if(this.backgroundImage == null) {
+		if (this.backgroundImage == null) {
 			this.backgroundImage = backgroundImage;
 		} else {
-			// set both properties since we inherited from PImage to extend FilePath
+			// set both properties since we inherited from PImage to extend
+			// FilePath
 			this.backgroundImage.setImage(backgroundImage.getImage());
 			this.backgroundImage.setFilePath(backgroundImage.getFilePath());
 		}
 		PBoundsHandle.addBoundsHandlesTo(this.backgroundImage);
-		final java.util.ListIterator<PNode> nodes = getLayer().getChildrenIterator();
+		final java.util.ListIterator<PNode> nodes = getLayer()
+				.getChildrenIterator();
 		while (nodes.hasNext()) {
 			PNode node = nodes.next();
 			if (node instanceof PImage) {
@@ -191,16 +237,19 @@ public class BrickCanvas extends PCanvas {
 		getLayer().addChild(this.backgroundImage);
 		this.backgroundImage.moveToBack();
 	}
+
 	public Cutter getCutTool() {
-		if(cutTool == null) {
+		if (cutTool == null) {
 			cutTool = new Cutter(this);
 		}
 		return cutTool;
 	}
+
 	@SuppressWarnings("unchecked")
 	public void setCutTool(Cutter cutTool) {
 		this.cutTool = cutTool;
-		final java.util.ListIterator<PNode> nodes = getLayer().getChildrenIterator();
+		final java.util.ListIterator<PNode> nodes = getLayer()
+				.getChildrenIterator();
 		while (nodes.hasNext()) {
 			PNode node = nodes.next();
 			if (node instanceof com.stoneworks.Cutter) {
@@ -209,5 +258,26 @@ public class BrickCanvas extends PCanvas {
 			}
 		}
 		getLayer().addChild(this.cutTool);
+	}
+	/**
+	 * 
+	 * @param b
+	 */
+	public void addBrick(Brick b) {
+		getLayer().addChild(b);
+	}
+	/**
+	 * 
+	 * @param b
+	 */
+	public void removeBrick(Brick b) {
+		getLayer().removeChild(b);
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public Collection getBricks() {
+		return getLayer().getAllNodes();
 	}
 }
