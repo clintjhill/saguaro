@@ -29,6 +29,9 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	public static final String FLAVOR_NAME = DataFlavor.javaJVMLocalObjectMimeType
 			+ ";class=com.stoneworks.Brick";
 
+	public static final String PROPERTY_CUT = "cut";
+    public static final int PROPERTY_CODE_CUT = 1 << 19;
+    
 	/**
 	 * 
 	 */
@@ -81,6 +84,7 @@ public class Brick extends PPath implements Cuttable, Transferable {
 			this.setPathTo(newArea);
 			com.stoneworks.undo.UndoBrickCut edit = new com.stoneworks.undo.UndoBrickCut(this,original,newArea);
 			this.undoManager.addEdit(edit);
+			this.firePropertyChange(PROPERTY_CODE_CUT, PROPERTY_CUT, null, this);
 		}
 	}
 

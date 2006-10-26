@@ -12,6 +12,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import edu.umd.cs.piccolo.PCamera;
@@ -47,6 +48,9 @@ public class BrickCanvas extends PCanvas {
 	static protected Color gridPaint = Color.LIGHT_GRAY;
 
 	static protected double gridSpacing = 6;
+	
+	public static final String PROPERTY_BRICK_ADDED = "brickAdded";
+	public static final String PROPERTY_BRICK_REMOVED = "brickRemoved";
 
 	/**
 	 * Returns Singleton instance of BrickCanvas
@@ -265,6 +269,7 @@ public class BrickCanvas extends PCanvas {
 	 */
 	public void addBrick(Brick b) {
 		getLayer().addChild(b);
+		firePropertyChange(PROPERTY_BRICK_ADDED, null, b);
 	}
 	/**
 	 * 
@@ -272,12 +277,17 @@ public class BrickCanvas extends PCanvas {
 	 */
 	public void removeBrick(Brick b) {
 		getLayer().removeChild(b);
+		firePropertyChange(PROPERTY_BRICK_REMOVED, b, null);
 	}
 	/**
 	 * 
 	 * @return
 	 */
-	public Collection getBricks() {
-		return getLayer().getAllNodes();
+	public Collection<Brick> getBricks() {
+		Collection<Brick> bricks = new ArrayList<Brick>();
+		for(Object o : getLayer().getAllNodes()) {
+			if(o instanceof Brick) bricks.add((Brick)o);
+		}
+		return bricks;
 	}
 }
