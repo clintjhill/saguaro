@@ -70,14 +70,17 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	}
 
 	public void cut(Shape s) {
-		java.awt.geom.Area thisArea = new java.awt.geom.Area(getPathReference());
-		thisArea.transform(getTransform());
+		java.awt.geom.Area originalArea = new java.awt.geom.Area(getPathReference());
+		java.awt.geom.Area original = (java.awt.geom.Area)originalArea.clone();
+		originalArea.transform(getTransform());
 		java.awt.geom.Area otherArea = new java.awt.geom.Area(s);
-		if (thisArea.intersects(otherArea.getBounds2D())) {
-			thisArea.subtract(otherArea);
-			java.awt.geom.Area finalArea = thisArea.createTransformedArea(this
+		if (originalArea.intersects(otherArea.getBounds2D())) {
+			originalArea.subtract(otherArea);
+			java.awt.geom.Area newArea = originalArea.createTransformedArea(this
 					.getInverseTransform());
-			this.setPathTo(finalArea);
+			this.setPathTo(newArea);
+			com.stoneworks.undo.UndoBrickCut edit = new com.stoneworks.undo.UndoBrickCut(this,original,newArea);
+			this.undoManager.addEdit(edit);
 		}
 	}
 
@@ -93,6 +96,10 @@ public class Brick extends PPath implements Cuttable, Transferable {
 		return getPathReference();
 	}
 
+	public javax.swing.undo.UndoManager getUndoManager() {
+		return this.undoManager;
+	}
+	
 	public String getDescription() {
 		PathIterator path = this.getPathReference().getPathIterator(null);
 		String description = "";
@@ -160,6 +167,7 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	private void initialize() {
 		setStrokePaint(java.awt.Color.gray);
 		addInputEventListener(new BrickInputEventHandler(this));
+		this.undoManager = new javax.swing.undo.UndoManager();
 	}
 
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
@@ -181,4 +189,6 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	}
 
 	private java.awt.Color color = null;
+	
+	private javax.swing.undo.UndoManager undoManager = null;
 }

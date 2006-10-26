@@ -40,9 +40,31 @@ class BrickInputEventHandler extends PBasicInputEventHandler {
 				public void actionPerformed(ActionEvent e) {
 					BrickCanvas.getInstance().removeBrick(brick);
 				}
-				
+
 			});
 			popUp.add(remove);
+			if (brick.getUndoManager().canUndo()) {
+				javax.swing.JMenuItem undo = new javax.swing.JMenuItem("Undo " + brick.getUndoManager().getPresentationName());
+				undo.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						brick.getUndoManager().undo();
+					}
+
+				});
+				popUp.add(undo);
+			}
+			if (brick.getUndoManager().canRedo()) {
+				javax.swing.JMenuItem redo = new javax.swing.JMenuItem("Redo " + brick.getUndoManager().getPresentationName());
+				redo.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						brick.getUndoManager().redo();
+					}
+
+				});
+				popUp.add(redo);
+			}
 			Point2D position = event.getCamera().viewToLocal(
 					event.getPosition());
 			popUp.show(event.getSourceSwingEvent().getComponent(),
