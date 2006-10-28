@@ -20,7 +20,6 @@ public class ConstructionReport {
 	 * 
 	 */
 	public ConstructionReport() {
-		table = new ConstructionTable();
 		JFreeReportBoot.getInstance().start();
 	}
 
@@ -38,8 +37,7 @@ public class ConstructionReport {
 					"construction.xml", ConstructionReport.class);
 			final ReportGenerator generator = ReportGenerator.getInstance();
 			JFreeReport report = generator.parseReport(url);
-			report.setData(this.table);
-
+			report.setData(new ConstructionTable());
 			final PreviewDialog frame = new PreviewDialog(report);
 			frame.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
 			frame.pack();
@@ -49,14 +47,4 @@ public class ConstructionReport {
 			// throw new ReportDefinitionException("Parsing failed", e);
 		}
 	}
-
-	public ConstructionTable getTable() {
-		return table;
-	}
-
-	public void setTable(ConstructionTable table) {
-		this.table = table;
-	}
-
-	private ConstructionTable table = null;
 }

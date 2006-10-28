@@ -3,6 +3,7 @@
  */
 package com.stoneworks;
 
+import java.awt.Shape;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -55,7 +56,9 @@ public class CutSynchronizer {
 			Brick brick = (Brick) evt.getSource();
 			if (evt.getPropertyName().equals(Brick.PROPERTY_CUT)) {
 				if (!getCutList().contains(brick)) {
-					getCutList().addElement(brick);
+					Brick copy = new Brick((Shape)brick.getPathReference().clone());
+					copy.setColor(brick.getColor());
+					getCutList().addElement(copy);
 				}
 			}
 		}

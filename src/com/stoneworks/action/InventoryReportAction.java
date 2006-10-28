@@ -26,42 +26,20 @@ public class InventoryReportAction extends AbstractAction {
 	 * @param c
 	 * @param l
 	 */
-	public InventoryReportAction(com.stoneworks.BrickCanvas c) {
+	public InventoryReportAction() {
 		super();
-		this.canvas = c;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	public void actionPerformed(ActionEvent e) {
 		BrickInventoryReport report = new BrickInventoryReport();
-		
-		if (canvas != null) {
-			for (Object obj : canvas.getBricks()) {
-				if (obj instanceof Brick) {
-					Brick brick = (Brick) obj;
-					report.getTable().addBrick(brick);
-				}
-			}
+		for (Brick b : canvas.getBricks()) {
+			report.getTable().addBrick(b);
 		}
-		
 		report.executeReport();
 	}
 
-	public com.stoneworks.BrickCanvas getCanvas() {
-		return canvas;
-	}
 
-
-	public void setCanvas(com.stoneworks.BrickCanvas canvas) {
-		this.canvas = canvas;
-	}
-
-
-	private com.stoneworks.BrickCanvas canvas = null;
+	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas.getInstance();
 
 
 }

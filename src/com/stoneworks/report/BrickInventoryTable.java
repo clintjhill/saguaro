@@ -27,7 +27,8 @@ public class BrickInventoryTable extends AbstractTableModel {
 		int foundQuantity = 0;
 		for(int i = 0; i < this.getRowCount(); i++) {
 			final BrickInventoryRow row = rows.get(i);
-			if(row.getCut().equals(b)) {
+			//TODO: I don't like this here...need a more robust solution for equals in Brick
+			if(row.getCut().getDescription().equals(b.getDescription())) {
 				found = true;
 				foundOnRow = i;
 				foundQuantity = row.getCutCount();

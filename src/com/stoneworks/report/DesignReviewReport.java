@@ -23,7 +23,6 @@ public class DesignReviewReport {
 	 * 
 	 */
 	public DesignReviewReport() {
-		table = new DesignReviewTable();
 		JFreeReportBoot.getInstance().start();
 	}
 
@@ -37,8 +36,7 @@ public class DesignReviewReport {
 					"design-review.xml", DesignReviewReport.class);
 			final ReportGenerator generator = ReportGenerator.getInstance();
 			JFreeReport report = generator.parseReport(url);
-			report.setData(this.table);
-
+			report.setData(new DesignReviewTable());
 			final PreviewDialog frame = new PreviewDialog(report);
 			frame.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
 			frame.pack();
@@ -47,15 +45,5 @@ public class DesignReviewReport {
 		} catch (Exception e) {
 			// throw new ReportDefinitionException("Parsing failed", e);
 		}
-	}
-
-	private DesignReviewTable table = null;
-
-	public DesignReviewTable getTable() {
-		return table;
-	}
-
-	public void setTable(DesignReviewTable table) {
-		this.table = table;
 	}
 }

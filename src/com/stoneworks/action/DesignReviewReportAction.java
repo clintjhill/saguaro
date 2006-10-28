@@ -23,27 +23,12 @@ public class DesignReviewReportAction extends AbstractAction {
 	/**
 	 * 
 	 */
-	public DesignReviewReportAction(com.stoneworks.BrickCanvas c) {
+	public DesignReviewReportAction() {
 		super();
-		this.canvas = c;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		DesignReviewReport designReport = new DesignReviewReport();
-		if (canvas != null) {
-			designReport.getTable().addCanvas(canvas);
-		}
 		designReport.executeReport();
 	}
-
-	public com.stoneworks.BrickCanvas getCanvas() {
-		return canvas;
-	}
-
-	public void setCanvas(com.stoneworks.BrickCanvas canvas) {
-		this.canvas = canvas;
-	}
-
-	private com.stoneworks.BrickCanvas canvas = null;
-
 }

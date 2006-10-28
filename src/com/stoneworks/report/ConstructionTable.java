@@ -11,7 +11,6 @@ import javax.swing.JComponent;
 import javax.swing.table.AbstractTableModel;
 
 import com.stoneworks.Brick;
-import com.stoneworks.BrickCanvas;
 
 import edu.umd.cs.piccolo.PNode;
 
@@ -31,22 +30,6 @@ public class ConstructionTable extends AbstractTableModel {
 	 */
 	public ConstructionTable() {
 		this.rows = new java.util.ArrayList<ConstructionRow>();
-	}
-
-	/**
-	 * 
-	 * @param c
-	 */
-	public void addCanvas(com.stoneworks.BrickCanvas c) {
-		//FIXME: What's going on here - does the singleton remove the need for this method now?
-		this.canvas = BrickCanvas.getInstance();
-		for(Object obj : c.getBricks()) {
-			if(obj instanceof Brick) {
-				Brick b = (Brick)obj;
-				this.canvas.getLayer().addChild((Brick)b.clone());
-			}
-		}
-		this.canvas.showBrickStrokes(false);
 		assignColors();
 		getInventory(getCanvasImage());
 	}
@@ -67,36 +50,32 @@ public class ConstructionTable extends AbstractTableModel {
 	@SuppressWarnings("unchecked")
 	private java.awt.Image getCanvasImage() {
 		java.awt.Image canvasImage = null;
-		this.canvas.getCutTool().setVisible(false);
-		this.canvas.getBackgroundImage().setVisible(false);
+		this.canvas.showTools(false);
 		canvasImage = this.canvas.getLayer().toImage(940, 570, null);
-		this.canvas.getCutTool().setVisible(true);
-		this.canvas.getBackgroundImage().setVisible(true);
+		this.canvas.showTools(true);
 		return canvasImage;
 	}
 	
 	private void getInventory(Image canvasImage) {
-		for(Object obj : this.canvas.getBricks()) {
-			if(obj instanceof Brick) {
-				Brick b = (Brick)obj;
-				boolean found = false;
-				int foundOnRow = 0;
-				int foundQuantity = 0;
-				for(int i = 0; i < this.getRowCount(); i++) {
-					final ConstructionRow row = rows.get(i);
-					if(row.getCut().getDescription().equals(b.getDescription())) {
-						found = true;
-						foundOnRow = i;
-						foundQuantity = row.getCutCount();
-						break;
-					}
+		for(Brick b : this.canvas.getBricks()) {
+			boolean found = false;
+			int foundOnRow = 0;
+			int foundQuantity = 0;
+			for(int i = 0; i < this.getRowCount(); i++) {
+				final ConstructionRow row = rows.get(i);
+				//TODO: I don't like this here...need a more robust solution for equals in Brick
+				if(row.getCut().getDescription().equals(b.getDescription())) {
+					found = true;
+					foundOnRow = i;
+					foundQuantity = row.getCutCount();
+					break;
 				}
-				if(found) {
-					this.setValueAt(foundQuantity+1, foundOnRow, 2);
-				} else {
-					Brick newBrick = colorAssigned(b);
-					rows.add(new ConstructionRow(canvasImage,1,newBrick.getDescription(),newBrick));
-				}
+			}
+			if(found) {
+				this.setValueAt(foundQuantity+1, foundOnRow, 2);
+			} else {
+				Brick newBrick = colorAssigned(b);
+				rows.add(new ConstructionRow(canvasImage,1,newBrick.getDescription(),newBrick));
 			}
 		}
 	}
@@ -190,7 +169,7 @@ public class ConstructionTable extends AbstractTableModel {
 		return null;
 	}
 
-	private com.stoneworks.BrickCanvas canvas = null;
+	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas.getInstance();
 	
 	private java.util.ArrayList<ConstructionRow> rows = null;
 	

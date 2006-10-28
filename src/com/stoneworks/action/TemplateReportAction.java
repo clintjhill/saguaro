@@ -24,9 +24,8 @@ public class TemplateReportAction extends AbstractAction {
 	/**
 	 * 
 	 */
-	public TemplateReportAction(com.stoneworks.BrickCanvas c) {
+	public TemplateReportAction() {
 		super();
-		this.canvas = c;
 	}
 
 	/* (non-Javadoc)
@@ -34,27 +33,12 @@ public class TemplateReportAction extends AbstractAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		BrickTemplateReport report = new BrickTemplateReport();
-		if (canvas != null) {
-			for (Object obj : canvas.getBricks()) {
-				if (obj instanceof Brick) {
-					Brick brick = (Brick) obj;
-					report.getTable().addBrick(brick);
-				}
-			}
+		for (Brick b : canvas.getBricks()) {
+			report.getTable().addBrick(b);
 		}
-		
 		report.executeReport();
 	}
-	
-	public com.stoneworks.BrickCanvas getCanvas() {
-		return canvas;
-	}
 
 
-	public void setCanvas(com.stoneworks.BrickCanvas canvas) {
-		this.canvas = canvas;
-	}
-
-
-	private com.stoneworks.BrickCanvas canvas = null;
+	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas.getInstance();
 }

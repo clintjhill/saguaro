@@ -23,7 +23,7 @@ public class ConstructionReportAction extends AbstractAction {
 	/**
 	 * 
 	 */
-	public ConstructionReportAction(com.stoneworks.BrickCanvas c) {
+	public ConstructionReportAction() {
 		super();
 	}
 

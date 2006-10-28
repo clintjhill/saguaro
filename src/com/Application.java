@@ -391,7 +391,7 @@ public class Application {
 		if (printInventoryMenuItem == null) {
 			printInventoryMenuItem = new JMenuItem();
 			printInventoryMenuItem.setText("Print Inventory");
-			printInventoryMenuItem.addActionListener(new InventoryReportAction(getBrickCanvasManager().getBrickCanvas()));
+			printInventoryMenuItem.addActionListener(new InventoryReportAction());
 		}
 		return printInventoryMenuItem;
 	}
@@ -400,7 +400,7 @@ public class Application {
 		if(printTemplateMenuItem == null) {
 			printTemplateMenuItem = new JMenuItem();
 			printTemplateMenuItem.setText("Print Templates");
-			printTemplateMenuItem.addActionListener(new TemplateReportAction(getBrickCanvasManager().getBrickCanvas()));
+			printTemplateMenuItem.addActionListener(new TemplateReportAction());
 		}
 		return printTemplateMenuItem;
 	}
@@ -408,7 +408,7 @@ public class Application {
 		if (printDesignReviewMenuItem == null) {
 			printDesignReviewMenuItem = new JMenuItem();
 			printDesignReviewMenuItem.setText("Print Design Review");
-			printDesignReviewMenuItem.addActionListener(new DesignReviewReportAction(getBrickCanvasManager().getBrickCanvas()));
+			printDesignReviewMenuItem.addActionListener(new DesignReviewReportAction());
 		}
 		return printDesignReviewMenuItem;
 	}
@@ -417,7 +417,7 @@ public class Application {
 		if(printConstructionMenuItem == null) {
 			printConstructionMenuItem = new JMenuItem();
 			printConstructionMenuItem.setText("Print Construction Review");
-			printConstructionMenuItem.addActionListener(new ConstructionReportAction(getBrickCanvasManager().getBrickCanvas()));
+			printConstructionMenuItem.addActionListener(new ConstructionReportAction());
 		}
 		return printConstructionMenuItem;
 	}

@@ -6,7 +6,6 @@ package com.stoneworks;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -34,34 +33,43 @@ import edu.umd.cs.piccolox.handles.PBoundsHandle;
  */
 public class BrickCanvas extends PCanvas {
 
+	static protected Line2D gridLine = new Line2D.Double();
+
+	static protected Color gridPaint = Color.LIGHT_GRAY;
+
+	static protected double gridSpacing = 6;
+
+	static protected Stroke gridStroke = new BasicStroke(0.5F);
+
+	private static BrickCanvas instance = null;
+
+	public static final String PROPERTY_BRICK_ADDED = "brickAdded";
+
+	public static final String PROPERTY_BRICK_REMOVED = "brickRemoved";
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5126521237548541451L;
 
-	private static BrickCanvas instance = null;
-	
-    static protected Line2D gridLine = new Line2D.Double();
-
-	static protected Stroke gridStroke = new BasicStroke(0.5F);
-
-	static protected Color gridPaint = Color.LIGHT_GRAY;
-
-	static protected double gridSpacing = 6;
-	
-	public static final String PROPERTY_BRICK_ADDED = "brickAdded";
-	public static final String PROPERTY_BRICK_REMOVED = "brickRemoved";
-
 	/**
 	 * Returns Singleton instance of BrickCanvas
+	 * 
 	 * @return
 	 */
 	public static BrickCanvas getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new BrickCanvas();
 		}
 		return instance;
 	}
+
+	private BackgroundImage backgroundImage = null;
+
+	private Cutter cutTool = null;
+
+	private boolean paintGrid = true;
+
 	/**
 	 * 
 	 */
@@ -77,31 +85,35 @@ public class BrickCanvas extends PCanvas {
 			private static final long serialVersionUID = 0L;
 
 			protected void paint(PPaintContext paintContext) {
-				// make sure grid gets drawn on snap to grid boundaries. And
-				// expand a little to make sure that entire view is filled.
-				double bx = (getX() - (getX() % gridSpacing)) - gridSpacing;
-				double by = (getY() - (getY() % gridSpacing)) - gridSpacing;
-				double rightBorder = getX() + getWidth() + gridSpacing;
-				double bottomBorder = getY() + getHeight() + gridSpacing;
+				if (paintGrid) {
+					// make sure grid gets drawn on snap to grid boundaries. And
+					// expand a little to make sure that entire view is filled.
+					double bx = (getX() - (getX() % gridSpacing)) - gridSpacing;
+					double by = (getY() - (getY() % gridSpacing)) - gridSpacing;
+					double rightBorder = getX() + getWidth() + gridSpacing;
+					double bottomBorder = getY() + getHeight() + gridSpacing;
 
-				Graphics2D g2 = paintContext.getGraphics();
-				Rectangle2D clip = paintContext.getLocalClip();
+					Graphics2D g2 = paintContext.getGraphics();
+					Rectangle2D clip = paintContext.getLocalClip();
 
-				g2.setStroke(gridStroke);
-				g2.setPaint(gridPaint);
+					g2.setStroke(gridStroke);
+					g2.setPaint(gridPaint);
 
-				for (double x = bx; x < rightBorder; x += gridSpacing) {
-					gridLine.setLine(x, by, x, bottomBorder);
-					if (clip.intersectsLine(gridLine)) {
-						g2.draw(gridLine);
+					for (double x = bx; x < rightBorder; x += gridSpacing) {
+						gridLine.setLine(x, by, x, bottomBorder);
+						if (clip.intersectsLine(gridLine)) {
+							g2.draw(gridLine);
+						}
 					}
-				}
 
-				for (double y = by; y < bottomBorder; y += gridSpacing) {
-					gridLine.setLine(bx, y, rightBorder, y);
-					if (clip.intersectsLine(gridLine)) {
-						g2.draw(gridLine);
+					for (double y = by; y < bottomBorder; y += gridSpacing) {
+						gridLine.setLine(bx, y, rightBorder, y);
+						if (clip.intersectsLine(gridLine)) {
+							g2.draw(gridLine);
+						}
 					}
+				} else {
+					super.paint(paintContext);
 				}
 			}
 		};
@@ -136,7 +148,7 @@ public class BrickCanvas extends PCanvas {
 			@Override
 			public void mouseDragged(PInputEvent e) {
 				PNode node = e.getPickedNode();
-				if(node instanceof Brick || node instanceof Cutter) {
+				if (node instanceof Brick || node instanceof Cutter) {
 					super.mouseDragged(e);
 				}
 			}
@@ -144,11 +156,11 @@ public class BrickCanvas extends PCanvas {
 			@Override
 			public void mousePressed(PInputEvent e) {
 				PNode node = e.getPickedNode();
-				if(node instanceof Brick || node instanceof Cutter) {
+				if (node instanceof Brick || node instanceof Cutter) {
 					super.mousePressed(e);
 				}
 			}
-			
+
 		};
 		dragHandler.setMoveToFrontOnPress(true);
 		addInputEventListener(dragHandler);
@@ -160,11 +172,11 @@ public class BrickCanvas extends PCanvas {
 		camera.addChild(tooltipNode);
 
 		camera.addInputEventListener(new PBasicInputEventHandler() {
-			public void mouseMoved(PInputEvent event) {
+			public void mouseDragged(PInputEvent event) {
 				updateToolTip(event);
 			}
 
-			public void mouseDragged(PInputEvent event) {
+			public void mouseMoved(PInputEvent event) {
 				updateToolTip(event);
 			}
 
@@ -189,33 +201,47 @@ public class BrickCanvas extends PCanvas {
 
 	/**
 	 * 
-	 * @param show
+	 * @param b
 	 */
-	public void showBrickStrokes(boolean show) {
-		for (Object obj : getBricks()) {
-			if (obj instanceof Brick) {
-				Brick b = (Brick) obj;
-				strokePaint = b.getStrokePaint();
-				if (show) {
-					b.setStrokePaint(strokePaint);
-				} else {
-					b.setStrokePaint(null);
-				}
-			}
-		}
+	public void addBrick(Brick b) {
+		getLayer().addChild(b);
+		firePropertyChange(PROPERTY_BRICK_ADDED, null, b);
 	}
-
-	private Cutter cutTool = null;
-
-	private BackgroundImage backgroundImage = null;
-
-	private Paint strokePaint = null;
 
 	public BackgroundImage getBackgroundImage() {
 		if (backgroundImage == null) {
 			backgroundImage = new BackgroundImage();
 		}
 		return backgroundImage;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Collection<Brick> getBricks() {
+		Collection<Brick> bricks = new ArrayList<Brick>();
+		for (Object o : getLayer().getAllNodes()) {
+			if (o instanceof Brick)
+				bricks.add((Brick) o);
+		}
+		return bricks;
+	}
+
+	public Cutter getCutTool() {
+		if (cutTool == null) {
+			cutTool = new Cutter(this);
+		}
+		return cutTool;
+	}
+
+	/**
+	 * 
+	 * @param b
+	 */
+	public void removeBrick(Brick b) {
+		getLayer().removeChild(b);
+		firePropertyChange(PROPERTY_BRICK_REMOVED, b, null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -242,13 +268,6 @@ public class BrickCanvas extends PCanvas {
 		this.backgroundImage.moveToBack();
 	}
 
-	public Cutter getCutTool() {
-		if (cutTool == null) {
-			cutTool = new Cutter(this);
-		}
-		return cutTool;
-	}
-
 	@SuppressWarnings("unchecked")
 	public void setCutTool(Cutter cutTool) {
 		this.cutTool = cutTool;
@@ -263,31 +282,30 @@ public class BrickCanvas extends PCanvas {
 		}
 		getLayer().addChild(this.cutTool);
 	}
+
 	/**
 	 * 
-	 * @param b
+	 * @param show
 	 */
-	public void addBrick(Brick b) {
-		getLayer().addChild(b);
-		firePropertyChange(PROPERTY_BRICK_ADDED, null, b);
-	}
-	/**
-	 * 
-	 * @param b
-	 */
-	public void removeBrick(Brick b) {
-		getLayer().removeChild(b);
-		firePropertyChange(PROPERTY_BRICK_REMOVED, b, null);
-	}
-	/**
-	 * 
-	 * @return
-	 */
-	public Collection<Brick> getBricks() {
-		Collection<Brick> bricks = new ArrayList<Brick>();
-		for(Object o : getLayer().getAllNodes()) {
-			if(o instanceof Brick) bricks.add((Brick)o);
+	public void showBrickStrokes(boolean show) {
+		for (Brick b : getBricks()) {
+			if (show) {
+				b.setStrokePaint(java.awt.Color.gray);
+			} else {
+				b.setStrokePaint(null);
+			}
 		}
-		return bricks;
+	}
+
+	/**
+	 * Sets all of the drawing space tools to visible or not
+	 * 
+	 * @param isVisible
+	 */
+	public void showTools(boolean isVisible) {
+		this.getCutTool().setVisible(isVisible);
+		this.getBackgroundImage().setVisible(isVisible);
+		this.paintGrid = isVisible;
+		this.showBrickStrokes(isVisible);
 	}
 }
