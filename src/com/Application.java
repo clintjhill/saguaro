@@ -4,22 +4,26 @@
 package com;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Event;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.stoneworks.CutSynchronizer;
@@ -31,8 +35,9 @@ import com.stoneworks.action.TemplateReportAction;
 import com.stoneworks.gui.BrickCanvasManager;
 import com.stoneworks.gui.BrickManager;
 import com.stoneworks.gui.ProjectManager;
-import java.awt.Toolkit;
-
+import javax.swing.JScrollPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 /**
  * @author clinthill
@@ -63,30 +68,32 @@ public class Application {
 	private JMenuItem pasteMenuItem = null;
 
 	private JMenuItem saveMenuItem = null;
-	
+
 	private JMenuItem openMenuItem = null;
 
 	private JMenuItem printInventoryMenuItem = null;
 
 	private JMenuItem printDesignReviewMenuItem = null;
-	
+
 	private JMenuItem printConstructionMenuItem = null;
-	
+
 	private JMenuItem printTemplateMenuItem = null;
 
 	private JDialog aboutDialog = null;
 
 	private JPanel aboutContentPane = null;
 
-	private JLabel aboutVersionLabel = null;
-
 	private ProjectManager projectManager = null;
-	
-	private Project project = new Project();  //  @jve:decl-index=0:
+
+	private Project project = new Project(); // @jve:decl-index=0:
 
 	private BrickManager brickManager = null;
 
 	private BrickCanvasManager brickCanvasManager = null;
+
+	private JEditorPane aboutText = null;
+
+	private JScrollPane jScrollPane = null;
 
 	/**
 	 * 
@@ -100,21 +107,23 @@ public class Application {
 	 * @return javax.swing.JFrame
 	 */
 	private JFrame getJFrame() {
-		if (jFrame == null) {
-			jFrame = new JFrame();
-			jFrame.setTitle("Saguaro Stoneworks");
-			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-			jFrame.setSize(640, 480);
-			jFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/com/stoneworks/icon/groundskeeper_16.png")));
-			jFrame.setContentPane(getJContentPane());
-			jFrame.setJMenuBar(getJJMenuBar());
+		if (this.jFrame == null) {
+			this.jFrame = new JFrame();
+			this.jFrame.setTitle("Saguaro Stoneworks");
+			this.jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			this.jFrame.setSize(640, 480);
+			this.jFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(
+					this.getClass().getResource(
+							"/com/stoneworks/icon/groundskeeper_16.png")));
+			this.jFrame.setContentPane(this.getJContentPane());
+			this.jFrame.setJMenuBar(this.getJJMenuBar());
 			@SuppressWarnings("unused")
 			CutSynchronizer cutSynch = new CutSynchronizer(
-					getBrickCanvasManager().getBrickCanvas(), getBrickManager()
+					this.getBrickCanvasManager().getBrickCanvas(), this.getBrickManager()
 							.getCutList());
 		}
-		return jFrame;
+		return this.jFrame;
 	}
 
 	/**
@@ -123,14 +132,14 @@ public class Application {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getProjectManager(), BorderLayout.WEST);
-			jContentPane.add(getBrickManager(), BorderLayout.EAST);
-			jContentPane.add(getBrickCanvasManager(), BorderLayout.CENTER);
+		if (this.jContentPane == null) {
+			this.jContentPane = new JPanel();
+			this.jContentPane.setLayout(new BorderLayout());
+			this.jContentPane.add(this.getProjectManager(), BorderLayout.WEST);
+			this.jContentPane.add(this.getBrickManager(), BorderLayout.EAST);
+			this.jContentPane.add(this.getBrickCanvasManager(), BorderLayout.CENTER);
 		}
-		return jContentPane;
+		return this.jContentPane;
 	}
 
 	/**
@@ -139,13 +148,13 @@ public class Application {
 	 * @return javax.swing.JMenuBar
 	 */
 	private JMenuBar getJJMenuBar() {
-		if (jJMenuBar == null) {
-			jJMenuBar = new JMenuBar();
-			jJMenuBar.add(getFileMenu());
-			jJMenuBar.add(getEditMenu());
-			jJMenuBar.add(getHelpMenu());
+		if (this.jJMenuBar == null) {
+			this.jJMenuBar = new JMenuBar();
+			this.jJMenuBar.add(this.getFileMenu());
+			this.jJMenuBar.add(this.getEditMenu());
+			this.jJMenuBar.add(this.getHelpMenu());
 		}
-		return jJMenuBar;
+		return this.jJMenuBar;
 	}
 
 	/**
@@ -154,20 +163,20 @@ public class Application {
 	 * @return javax.swing.JMenu
 	 */
 	private JMenu getFileMenu() {
-		if (fileMenu == null) {
-			fileMenu = new JMenu();
-			fileMenu.setText("File");
-			fileMenu.add(getOpenMenuItem());
-			fileMenu.add(getSaveMenuItem());
-			fileMenu.add(new javax.swing.JSeparator());
-			fileMenu.add(getPrintInventoryMenuItem());
-			fileMenu.add(getPrintTemplateMenuItem());
-			fileMenu.add(getDesignReviewMenuItem());
-			fileMenu.add(getConstructionMenuItem());
-			fileMenu.add(new javax.swing.JSeparator());
-			fileMenu.add(getExitMenuItem());
+		if (this.fileMenu == null) {
+			this.fileMenu = new JMenu();
+			this.fileMenu.setText("File");
+			this.fileMenu.add(this.getOpenMenuItem());
+			this.fileMenu.add(this.getSaveMenuItem());
+			this.fileMenu.add(new javax.swing.JSeparator());
+			this.fileMenu.add(this.getPrintInventoryMenuItem());
+			this.fileMenu.add(this.getPrintTemplateMenuItem());
+			this.fileMenu.add(this.getDesignReviewMenuItem());
+			this.fileMenu.add(this.getConstructionMenuItem());
+			this.fileMenu.add(new javax.swing.JSeparator());
+			this.fileMenu.add(this.getExitMenuItem());
 		}
-		return fileMenu;
+		return this.fileMenu;
 	}
 
 	/**
@@ -176,14 +185,14 @@ public class Application {
 	 * @return javax.swing.JMenu
 	 */
 	private JMenu getEditMenu() {
-		if (editMenu == null) {
-			editMenu = new JMenu();
-			editMenu.setText("Edit");
-			editMenu.add(getCutMenuItem());
-			editMenu.add(getCopyMenuItem());
-			editMenu.add(getPasteMenuItem());
+		if (this.editMenu == null) {
+			this.editMenu = new JMenu();
+			this.editMenu.setText("Edit");
+			this.editMenu.add(this.getCutMenuItem());
+			this.editMenu.add(this.getCopyMenuItem());
+			this.editMenu.add(this.getPasteMenuItem());
 		}
-		return editMenu;
+		return this.editMenu;
 	}
 
 	/**
@@ -192,12 +201,12 @@ public class Application {
 	 * @return javax.swing.JMenu
 	 */
 	private JMenu getHelpMenu() {
-		if (helpMenu == null) {
-			helpMenu = new JMenu();
-			helpMenu.setText("Help");
-			helpMenu.add(getAboutMenuItem());
+		if (this.helpMenu == null) {
+			this.helpMenu = new JMenu();
+			this.helpMenu.setText("Help");
+			this.helpMenu.add(this.getAboutMenuItem());
 		}
-		return helpMenu;
+		return this.helpMenu;
 	}
 
 	/**
@@ -206,16 +215,16 @@ public class Application {
 	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getExitMenuItem() {
-		if (exitMenuItem == null) {
-			exitMenuItem = new JMenuItem();
-			exitMenuItem.setText("Exit");
-			exitMenuItem.addActionListener(new ActionListener() {
+		if (this.exitMenuItem == null) {
+			this.exitMenuItem = new JMenuItem();
+			this.exitMenuItem.setText("Exit");
+			this.exitMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.exit(0);
 				}
 			});
 		}
-		return exitMenuItem;
+		return this.exitMenuItem;
 	}
 
 	/**
@@ -224,21 +233,21 @@ public class Application {
 	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getAboutMenuItem() {
-		if (aboutMenuItem == null) {
-			aboutMenuItem = new JMenuItem();
-			aboutMenuItem.setText("About");
-			aboutMenuItem.addActionListener(new ActionListener() {
+		if (this.aboutMenuItem == null) {
+			this.aboutMenuItem = new JMenuItem();
+			this.aboutMenuItem.setText("About");
+			this.aboutMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JDialog aboutDialog = getAboutDialog();
+					JDialog aboutDialog = Application.this.getAboutDialog();
 					aboutDialog.pack();
-					Point loc = getJFrame().getLocation();
+					Point loc = Application.this.getJFrame().getLocation();
 					loc.translate(20, 20);
 					aboutDialog.setLocation(loc);
 					aboutDialog.setVisible(true);
 				}
 			});
 		}
-		return aboutMenuItem;
+		return this.aboutMenuItem;
 	}
 
 	/**
@@ -247,12 +256,13 @@ public class Application {
 	 * @return javax.swing.JDialog
 	 */
 	private JDialog getAboutDialog() {
-		if (aboutDialog == null) {
-			aboutDialog = new JDialog(getJFrame(), true);
-			aboutDialog.setTitle("About");
-			aboutDialog.setContentPane(getAboutContentPane());
+		if (this.aboutDialog == null) {
+			this.aboutDialog = new JDialog(this.getJFrame(), true);
+			this.aboutDialog.setTitle("About");
+			aboutDialog.setPreferredSize(new Dimension(400, 400));
+			this.aboutDialog.setContentPane(this.getAboutContentPane());
 		}
-		return aboutDialog;
+		return this.aboutDialog;
 	}
 
 	/**
@@ -261,26 +271,16 @@ public class Application {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAboutContentPane() {
-		if (aboutContentPane == null) {
-			aboutContentPane = new JPanel();
-			aboutContentPane.setLayout(new BorderLayout());
-			aboutContentPane.add(getAboutVersionLabel(), BorderLayout.CENTER);
+		if (this.aboutContentPane == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.fill = GridBagConstraints.BOTH;
+			gridBagConstraints.weighty = 1.0;
+			gridBagConstraints.weightx = 1.0;
+			this.aboutContentPane = new JPanel();
+			this.aboutContentPane.setLayout(new GridBagLayout());
+			aboutContentPane.add(getJScrollPane(), gridBagConstraints);
 		}
-		return aboutContentPane;
-	}
-
-	/**
-	 * This method initializes aboutVersionLabel
-	 * 
-	 * @return javax.swing.JLabel
-	 */
-	private JLabel getAboutVersionLabel() {
-		if (aboutVersionLabel == null) {
-			aboutVersionLabel = new JLabel();
-			aboutVersionLabel.setText("Version 1.0");
-			aboutVersionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		}
-		return aboutVersionLabel;
+		return this.aboutContentPane;
 	}
 
 	/**
@@ -289,13 +289,13 @@ public class Application {
 	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getCutMenuItem() {
-		if (cutMenuItem == null) {
-			cutMenuItem = new JMenuItem();
-			cutMenuItem.setText("Cut");
-			cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
+		if (this.cutMenuItem == null) {
+			this.cutMenuItem = new JMenuItem();
+			this.cutMenuItem.setText("Cut");
+			this.cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
 					Event.CTRL_MASK, true));
 		}
-		return cutMenuItem;
+		return this.cutMenuItem;
 	}
 
 	/**
@@ -304,13 +304,13 @@ public class Application {
 	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getCopyMenuItem() {
-		if (copyMenuItem == null) {
-			copyMenuItem = new JMenuItem();
-			copyMenuItem.setText("Copy");
-			copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
+		if (this.copyMenuItem == null) {
+			this.copyMenuItem = new JMenuItem();
+			this.copyMenuItem.setText("Copy");
+			this.copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
 					Event.CTRL_MASK, true));
 		}
-		return copyMenuItem;
+		return this.copyMenuItem;
 	}
 
 	/**
@@ -319,119 +319,136 @@ public class Application {
 	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getPasteMenuItem() {
-		if (pasteMenuItem == null) {
-			pasteMenuItem = new JMenuItem();
-			pasteMenuItem.setText("Paste");
-			pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
+		if (this.pasteMenuItem == null) {
+			this.pasteMenuItem = new JMenuItem();
+			this.pasteMenuItem.setText("Paste");
+			this.pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
 					Event.CTRL_MASK, true));
 		}
-		return pasteMenuItem;
+		return this.pasteMenuItem;
 	}
 
 	private JMenuItem getOpenMenuItem() {
-		if(openMenuItem == null) {
-			openMenuItem = new JMenuItem();
-			openMenuItem.setText("Open...");
-			openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+		if (this.openMenuItem == null) {
+			this.openMenuItem = new JMenuItem();
+			this.openMenuItem.setText("Open...");
+			this.openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 					Event.CTRL_MASK, true));
-			openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			this.openMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					JFileChooser chooser = new JFileChooser();
-					int option = chooser.showOpenDialog(Application.this.getProjectManager());
-					if(option == JFileChooser.APPROVE_OPTION) {
-						project.open(chooser.getSelectedFile().getPath());
-						getBrickManager().setCutList(project.getCutList());
-						getBrickCanvasManager().setBrickCanvas(project.getBrickCanvas());
-						getProjectManager().setBrickCanvas(project.getBrickCanvas());
-						getProjectManager().setClientName(project.getProjectClient());
-						getProjectManager().setProjectName(project.getProjectName());
+					int option = chooser.showOpenDialog(Application.this
+							.getProjectManager());
+					if (option == JFileChooser.APPROVE_OPTION) {
+						Application.this.project.open(chooser.getSelectedFile().getPath());
+						Application.this.getBrickManager().setCutList(Application.this.project.getCutList());
+						Application.this.getBrickCanvasManager().setBrickCanvas(
+								Application.this.project.getBrickCanvas());
+						Application.this.getProjectManager().setBrickCanvas(
+								Application.this.project.getBrickCanvas());
+						Application.this.getProjectManager().setClientName(
+								Application.this.project.getProjectClient());
+						Application.this.getProjectManager().setProjectName(
+								Application.this.project.getProjectName());
 						@SuppressWarnings("unused")
 						CutSynchronizer cutSynch = new CutSynchronizer(
-								getBrickCanvasManager().getBrickCanvas(), getBrickManager()
-										.getCutList());
+								Application.this.getBrickCanvasManager().getBrickCanvas(),
+								Application.this.getBrickManager().getCutList());
 					}
 				}
 			});
 		}
-		return openMenuItem;
+		return this.openMenuItem;
 	}
+
 	/**
 	 * This method initializes jMenuItem
 	 * 
 	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getSaveMenuItem() {
-		if (saveMenuItem == null) {
-			saveMenuItem = new JMenuItem();
-			saveMenuItem.setText("Save...");
-			saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+		if (this.saveMenuItem == null) {
+			this.saveMenuItem = new JMenuItem();
+			this.saveMenuItem.setText("Save...");
+			this.saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 					Event.CTRL_MASK, true));
-			saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			this.saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					project.setBrickCanvas(getBrickCanvasManager().getBrickCanvas());
-					project.setCutList(getBrickManager().getCutList());
-					project.setProjectClient(getProjectManager().getClientName());
-					project.setProjectName(getProjectManager().getProjectName());
-					if(!project.hasFilePath()) {
+					Application.this.project.setBrickCanvas(Application.this.getBrickCanvasManager()
+							.getBrickCanvas());
+					Application.this.project.setCutList(Application.this.getBrickManager().getCutList());
+					Application.this.project.setProjectClient(Application.this.getProjectManager()
+							.getClientName());
+					Application.this.project
+							.setProjectName(Application.this.getProjectManager()
+									.getProjectName());
+					if (!Application.this.project.hasFilePath()) {
 						JFileChooser chooser = new JFileChooser();
-						int option = chooser.showSaveDialog(Application.this.getProjectManager());
-						if(option == JFileChooser.APPROVE_OPTION) {
-							project.save(chooser.getSelectedFile().getPath());
+						int option = chooser.showSaveDialog(Application.this
+								.getProjectManager());
+						if (option == JFileChooser.APPROVE_OPTION) {
+							Application.this.project.save(chooser.getSelectedFile().getPath());
 						}
 					} else {
-						project.save();
+						Application.this.project.save();
 					}
 				}
 			});
 		}
-		return saveMenuItem;
+		return this.saveMenuItem;
 	}
 
 	private JMenuItem getPrintInventoryMenuItem() {
-		if (printInventoryMenuItem == null) {
-			printInventoryMenuItem = new JMenuItem();
-			printInventoryMenuItem.setText("Print Inventory");
-			printInventoryMenuItem.addActionListener(new InventoryReportAction());
+		if (this.printInventoryMenuItem == null) {
+			this.printInventoryMenuItem = new JMenuItem();
+			this.printInventoryMenuItem.setText("Print Inventory");
+			this.printInventoryMenuItem
+					.addActionListener(new InventoryReportAction());
 		}
-		return printInventoryMenuItem;
+		return this.printInventoryMenuItem;
 	}
 
 	private JMenuItem getPrintTemplateMenuItem() {
-		if(printTemplateMenuItem == null) {
-			printTemplateMenuItem = new JMenuItem();
-			printTemplateMenuItem.setText("Print Templates");
-			printTemplateMenuItem.addActionListener(new TemplateReportAction());
+		if (this.printTemplateMenuItem == null) {
+			this.printTemplateMenuItem = new JMenuItem();
+			this.printTemplateMenuItem.setText("Print Templates");
+			this.printTemplateMenuItem.addActionListener(new TemplateReportAction());
 		}
-		return printTemplateMenuItem;
+		return this.printTemplateMenuItem;
 	}
+
 	private JMenuItem getDesignReviewMenuItem() {
-		if (printDesignReviewMenuItem == null) {
-			printDesignReviewMenuItem = new JMenuItem();
-			printDesignReviewMenuItem.setText("Print Design Review");
-			printDesignReviewMenuItem.addActionListener(new DesignReviewReportAction());
+		if (this.printDesignReviewMenuItem == null) {
+			this.printDesignReviewMenuItem = new JMenuItem();
+			this.printDesignReviewMenuItem.setText("Print Design Review");
+			this.printDesignReviewMenuItem
+					.addActionListener(new DesignReviewReportAction());
 		}
-		return printDesignReviewMenuItem;
+		return this.printDesignReviewMenuItem;
 	}
 
 	private JMenuItem getConstructionMenuItem() {
-		if(printConstructionMenuItem == null) {
-			printConstructionMenuItem = new JMenuItem();
-			printConstructionMenuItem.setText("Print Construction Review");
-			printConstructionMenuItem.addActionListener(new ConstructionReportAction());
+		if (this.printConstructionMenuItem == null) {
+			this.printConstructionMenuItem = new JMenuItem();
+			this.printConstructionMenuItem.setText("Print Construction Review");
+			this.printConstructionMenuItem
+					.addActionListener(new ConstructionReportAction());
 		}
-		return printConstructionMenuItem;
+		return this.printConstructionMenuItem;
 	}
+
 	/**
 	 * This method initializes projectManager
 	 * 
 	 * @return com.stoneworks.gui.ProjectManager
 	 */
 	private ProjectManager getProjectManager() {
-		if (projectManager == null) {
-			projectManager = new ProjectManager();
-			projectManager.setBrickCanvas(getBrickCanvasManager().getBrickCanvas());
+		if (this.projectManager == null) {
+			this.projectManager = new ProjectManager();
+			this.projectManager.setBrickCanvas(this.getBrickCanvasManager()
+					.getBrickCanvas());
 		}
-		return projectManager;
+		return this.projectManager;
 	}
 
 	/**
@@ -440,10 +457,10 @@ public class Application {
 	 * @return com.stoneworks.gui.BrickManager
 	 */
 	private BrickManager getBrickManager() {
-		if (brickManager == null) {
-			brickManager = new BrickManager();
+		if (this.brickManager == null) {
+			this.brickManager = new BrickManager();
 		}
-		return brickManager;
+		return this.brickManager;
 	}
 
 	/**
@@ -452,10 +469,49 @@ public class Application {
 	 * @return com.stoneworks.gui.BrickCanvasManager
 	 */
 	private BrickCanvasManager getBrickCanvasManager() {
-		if (brickCanvasManager == null) {
-			brickCanvasManager = new BrickCanvasManager();
+		if (this.brickCanvasManager == null) {
+			this.brickCanvasManager = new BrickCanvasManager();
 		}
-		return brickCanvasManager;
+		return this.brickCanvasManager;
+	}
+
+	/**
+	 * This method initializes aboutText	
+	 * 	
+	 * @return javax.swing.JEditorPane	
+	 */
+	private JEditorPane getAboutText() {
+		if (aboutText == null) {
+			aboutText = new JEditorPane();
+			aboutText.setContentType("text/html");
+			aboutText.setText("<html> <body id=\"about-dialog\"> \t<table border=\"0\" cellspacing=\"5\" cellpadding=\"5\"> \t\t<tr><th>Sagauro Stoneworks - Brick Mosaic Tool</th></tr> \t\t<tr><td>Developed by <a href=\"http://www.h3osoftware.com\">H3O Software</a> \t\t\t<p>Copyright (c) 2005, H3O Software LLC \t\t\tAll rights reserved.</p></td></tr> \t\t<tr> \t\t\t<td>Some portions of code used open source libraries. Credits: \t\t\t<ul> \t\t\t\t<li><a href=\"http://www.jfree.org/jfreereport/index.php\">JFreeReport</a></li> \t\t\t\t<li><a href=\"http://www.cs.umd.edu/hcil/jazz/\">Piccolo</a></li> \t\t\t\t<li><a href=\"https://substance.dev.java.net/\">Substance</a></li> \t\t\t\t<li><a href=\"http://www.extreme.indiana.edu/xgws/xsoap/xpp/mxp1/index.html\">Xpp3</a></li> \t\t\t\t<li><a href=\"http://xstream.codehaus.org/\">XStream</a></li> \t\t\t</ul> \t\t\t \t\t\t</td> \t\t</tr> \t</table> </body> </html>");
+			aboutText.addHyperlinkListener(new HyperlinkListener() {
+
+				public void hyperlinkUpdate(HyperlinkEvent e) {
+					try {
+						aboutText.setPage(e.getURL());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			});
+		}
+		return aboutText;
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getAboutText());
+		}
+		return jScrollPane;
 	}
 
 	/**

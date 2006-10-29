@@ -11,7 +11,7 @@ import edu.umd.cs.piccolo.util.PPaintContext;
 
 /**
  * @author clinthill
- *
+ * 
  */
 public class BackgroundImage extends PImage {
 
@@ -19,15 +19,15 @@ public class BackgroundImage extends PImage {
 	 * 
 	 */
 	private static final long serialVersionUID = 4015094150261832739L;
-	
+
 	private String filePath = null;
+
 	/**
 	 * 
 	 */
 	public BackgroundImage() {
 		super();
 	}
-
 
 	/**
 	 * @param fileName
@@ -46,19 +46,21 @@ public class BackgroundImage extends PImage {
 	}
 
 	public String getFilePath() {
-		return filePath;
+		return this.filePath;
 	}
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see edu.umd.cs.piccolo.nodes.PImage#paint(edu.umd.cs.piccolo.util.PPaintContext)
 	 */
 	/**
 	 * Do regular paint but include dimensions converted for feet and inches.
+	 * 
 	 * @param pc
 	 */
 	@Override
@@ -66,8 +68,10 @@ public class BackgroundImage extends PImage {
 		super.paint(pc);
 		Graphics2D g2D = pc.getGraphics();
 		g2D.setColor(java.awt.Color.black);
-		String width = com.stoneworks.math.StandardMeasurement.createForFeet(this.getWidth()).toString();
-		String height = com.stoneworks.math.StandardMeasurement.createForFeet(this.getHeight()).toString();
+		String width = com.stoneworks.math.StandardMeasurement.createForFeet(
+				this.getWidth()).toString();
+		String height = com.stoneworks.math.StandardMeasurement.createForFeet(
+				this.getHeight()).toString();
 		g2D.drawString("Dimensions: " + width + " x " + height, 5, -8);
 	}
 

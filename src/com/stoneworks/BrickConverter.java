@@ -73,12 +73,14 @@ public class BrickConverter implements
 				brick.setPathTo((GeneralPath) context.convertAnother(reader,
 						GeneralPath.class));
 			}
-			if(reader.getNodeName().equals("transform")) {
-				PAffineTransform transform = (PAffineTransform)context.convertAnother(reader, PAffineTransform.class);
+			if (reader.getNodeName().equals("transform")) {
+				PAffineTransform transform = (PAffineTransform) context
+						.convertAnother(reader, PAffineTransform.class);
 				brick.setTransform(transform);
 			}
-			if(reader.getNodeName().equals("color")) {
-				brick.setColor((Color)context.convertAnother(reader, Color.class));
+			if (reader.getNodeName().equals("color")) {
+				brick.setColor((Color) context.convertAnother(reader,
+						Color.class));
 			}
 			reader.moveUp();
 		}

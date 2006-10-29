@@ -42,7 +42,7 @@ public class BackgroundImageConverter implements Converter {
 	 */
 	public void marshal(Object source, HierarchicalStreamWriter writer,
 			MarshallingContext context) {
-		BackgroundImage image = (BackgroundImage)source;
+		BackgroundImage image = (BackgroundImage) source;
 		writer.startNode("imageFilePath");
 		context.convertAnother(image.getFilePath());
 		writer.endNode();
@@ -63,16 +63,18 @@ public class BackgroundImageConverter implements Converter {
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext context) {
 		BackgroundImage image = null;
-		while(reader.hasMoreChildren()) {
+		while (reader.hasMoreChildren()) {
 			reader.moveDown();
-			if(reader.getNodeName().equals("imageFilePath")) {
+			if (reader.getNodeName().equals("imageFilePath")) {
 				image = new BackgroundImage(reader.getValue());
 			}
-			if(image != null && reader.getNodeName().equals("imageTransform")) {
-				image.setTransform((AffineTransform)context.convertAnother(reader, AffineTransform.class));
+			if (image != null && reader.getNodeName().equals("imageTransform")) {
+				image.setTransform((AffineTransform) context.convertAnother(
+						reader, AffineTransform.class));
 			}
-			if(image != null && reader.getNodeName().equals("imageBounds")) {
-				image.setBounds((Rectangle)context.convertAnother(reader, Rectangle.class));
+			if (image != null && reader.getNodeName().equals("imageBounds")) {
+				image.setBounds((Rectangle) context.convertAnother(reader,
+						Rectangle.class));
 			}
 			reader.moveUp();
 		}

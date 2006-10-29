@@ -35,8 +35,8 @@
 package com.stoneworks.math;
 
 /**
- * A class that represents a standard measurement. It includes feet and inches with a standard unit
- * fraction for the inches.
+ * A class that represents a standard measurement. It includes feet and inches
+ * with a standard unit fraction for the inches.
  * 
  * @author clinthill
  * 
@@ -44,9 +44,10 @@ package com.stoneworks.math;
 public class StandardMeasurement {
 
 	/**
-	 * Returns a <code>StandardMeasurement</code> that only contains a measurement value for
-	 * inches. This method will convert the inches value passed in from a screen value. Divides
-	 * inches by 6 before creating the StandardMeasurement
+	 * Returns a <code>StandardMeasurement</code> that only contains a
+	 * measurement value for inches. This method will convert the inches value
+	 * passed in from a screen value. Divides inches by 6 before creating the
+	 * StandardMeasurement
 	 * 
 	 * @param inches
 	 * @return StandardMeasurement
@@ -56,15 +57,16 @@ public class StandardMeasurement {
 	}
 
 	/**
-	 * Returns a <code>StandardMeasurement</code> that contains a measurement which includes a
-	 * value for feet. This method will convert the inches value passed in from a screen value.
-	 * Divides inches by 6 before creating the StandardMeasurement
+	 * Returns a <code>StandardMeasurement</code> that contains a measurement
+	 * which includes a value for feet. This method will convert the inches
+	 * value passed in from a screen value. Divides inches by 6 before creating
+	 * the StandardMeasurement
 	 * 
 	 * @param feet
 	 * @return StandardMeasurement
 	 */
 	public static StandardMeasurement createForFeet(double feet) {
-		StandardMeasurement standard = new StandardMeasurement(feet/ 6);
+		StandardMeasurement standard = new StandardMeasurement(feet / 6);
 		return standard;
 	}
 
@@ -75,7 +77,8 @@ public class StandardMeasurement {
 	}
 
 	/**
-	 * Constructor that initializes feet and inches. Inches is set as a whole number.
+	 * Constructor that initializes feet and inches. Inches is set as a whole
+	 * number.
 	 * 
 	 * @param feet
 	 * @param inches
@@ -112,7 +115,8 @@ public class StandardMeasurement {
 			int inchRemainder = complexNumber.getWhole() - (this.feet * 12);
 			double inchesResult = inchRemainder + complexNumber.getRemainder();
 			this.inches = new MixedNumber(inchesResult);
-		} else { // the whole number is less than twelve so the value is all inches
+		} else { // the whole number is less than twelve so the value is all
+					// inches
 			this.inches = new MixedNumber(measure);
 		}
 	}
@@ -123,7 +127,7 @@ public class StandardMeasurement {
 	 * @return the feet
 	 */
 	public int getFeet() {
-		return feet;
+		return this.feet;
 	}
 
 	/**
@@ -132,7 +136,7 @@ public class StandardMeasurement {
 	 * @return the inches
 	 */
 	public MixedNumber getInches() {
-		return inches;
+		return this.inches;
 	}
 
 	/**
@@ -156,8 +160,8 @@ public class StandardMeasurement {
 	}
 
 	/**
-	 * Returns the double value of this measurement. The value is based on 12 inches in a foot and
-	 * the inches in the form of a double value.
+	 * Returns the double value of this measurement. The value is based on 12
+	 * inches in a foot and the inches in the form of a double value.
 	 * 
 	 * feet * 12 + inches.doubleValue;
 	 * 
@@ -194,18 +198,22 @@ public class StandardMeasurement {
 
 	/**
 	 * Returns this instance in a readable format
+	 * 
 	 * @return String
 	 */
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		String description = "";
-		if(this.feet <= 0) {
+		if (this.feet <= 0) {
 			description = this.inches.toString() + "''";
 		} else {
-			description = String.valueOf(this.feet) + "' " + this.inches.toString() + "''";
+			description = String.valueOf(this.feet) + "' "
+					+ this.inches.toString() + "''";
 		}
 		return description;
 	}

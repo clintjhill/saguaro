@@ -37,9 +37,9 @@ package com.stoneworks;
 import java.awt.Shape;
 
 /**
- * Interface describing the attributes and behaviors of a cuttable instance. Cuttable describes the
- * shape of the instance as well as provides a mechanism to "cut" the instance against another
- * shape.
+ * Interface describing the attributes and behaviors of a cuttable instance.
+ * Cuttable describes the shape of the instance as well as provides a mechanism
+ * to "cut" the instance against another shape.
  * 
  * @author clinthill
  * 

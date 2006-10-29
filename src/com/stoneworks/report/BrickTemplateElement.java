@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 
 /**
  * @author clinthill
- *
+ * 
  */
 public class BrickTemplateElement extends JComponent {
 
@@ -26,7 +26,7 @@ public class BrickTemplateElement extends JComponent {
 	}
 
 	public com.stoneworks.Brick getBrick() {
-		return brick;
+		return this.brick;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class BrickTemplateElement extends JComponent {
 		java.awt.Graphics2D g2D = (java.awt.Graphics2D) g;
 		g2D.scale(12, 12);
 		g2D.setStroke(new java.awt.BasicStroke(0.1F));
-		g2D.draw(brick.getCuttable());
+		g2D.draw(this.brick.getCuttable());
 	}
 
 	public void setBrick(com.stoneworks.Brick brick) {

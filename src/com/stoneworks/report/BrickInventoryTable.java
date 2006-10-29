@@ -25,20 +25,21 @@ public class BrickInventoryTable extends AbstractTableModel {
 		boolean found = false;
 		int foundOnRow = 0;
 		int foundQuantity = 0;
-		for(int i = 0; i < this.getRowCount(); i++) {
-			final BrickInventoryRow row = rows.get(i);
-			//TODO: I don't like this here...need a more robust solution for equals in Brick
-			if(row.getCut().getDescription().equals(b.getDescription())) {
+		for (int i = 0; i < this.getRowCount(); i++) {
+			final BrickInventoryRow row = this.rows.get(i);
+			// TODO: I don't like this here...need a more robust solution for
+			// equals in Brick
+			if (row.getCut().getDescription().equals(b.getDescription())) {
 				found = true;
 				foundOnRow = i;
 				foundQuantity = row.getCutCount();
 				break;
 			}
 		}
-		if(found) {
-			this.setValueAt(foundQuantity+1, foundOnRow, 1);
+		if (found) {
+			this.setValueAt(foundQuantity + 1, foundOnRow, 1);
 		} else {
-			rows.add(new BrickInventoryRow(1,b.getDescription(),b));
+			this.rows.add(new BrickInventoryRow(1, b.getDescription(), b));
 		}
 	}
 
@@ -47,7 +48,7 @@ public class BrickInventoryTable extends AbstractTableModel {
 	 */
 	public BrickInventoryTable(boolean forTemplates) {
 		this.forTemplates = forTemplates;
-		rows = new java.util.ArrayList<BrickInventoryRow>();
+		this.rows = new java.util.ArrayList<BrickInventoryRow>();
 	}
 
 	/*
@@ -91,7 +92,7 @@ public class BrickInventoryTable extends AbstractTableModel {
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
 	public int getRowCount() {
-		return rows.size();
+		return this.rows.size();
 	}
 
 	/*
@@ -100,11 +101,11 @@ public class BrickInventoryTable extends AbstractTableModel {
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		final BrickInventoryRow row = rows.get(rowIndex);
+		final BrickInventoryRow row = this.rows.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
-			return (forTemplates) ? new BrickTemplateElement(row.getCut()) :
-				new BrickReportElement(row.getCut());
+			return (this.forTemplates) ? new BrickTemplateElement(row.getCut())
+					: new BrickReportElement(row.getCut());
 		case 1:
 			return row.getCutCount();
 		case 2:
@@ -115,22 +116,22 @@ public class BrickInventoryTable extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		final BrickInventoryRow row = rows.get(rowIndex);
-		switch(columnIndex) {
-		case 0: 
-			row.setCut((com.stoneworks.Brick)aValue);
+		final BrickInventoryRow row = this.rows.get(rowIndex);
+		switch (columnIndex) {
+		case 0:
+			row.setCut((com.stoneworks.Brick) aValue);
 			break;
 		case 1:
 			row.setCutCount(Integer.valueOf(aValue.toString()));
 			break;
-		case 2: 
-			row.setCutDescription((String)aValue);
+		case 2:
+			row.setCutDescription((String) aValue);
 			break;
 		}
 	}
-	
+
 	private java.util.ArrayList<BrickInventoryRow> rows = null;
-	
+
 	private boolean forTemplates = false;
 
 }

@@ -12,11 +12,9 @@ import javax.swing.table.AbstractTableModel;
 
 import com.stoneworks.Brick;
 
-import edu.umd.cs.piccolo.PNode;
-
 /**
  * @author clinthill
- *
+ * 
  */
 public class ConstructionTable extends AbstractTableModel {
 
@@ -30,83 +28,78 @@ public class ConstructionTable extends AbstractTableModel {
 	 */
 	public ConstructionTable() {
 		this.rows = new java.util.ArrayList<ConstructionRow>();
-		assignColors();
-		getInventory(getCanvasImage());
+		this.getInventory(this.getCanvasImage());
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	private void assignColors() {
-		java.util.ListIterator<PNode> bricks = this.canvas.getLayer().getChildrenIterator();
-		while(bricks.hasNext()) {
-			PNode node = bricks.next();
-			if(node instanceof Brick) {
-				Brick b = (Brick)node;
-				Brick newB = colorAssigned(b);
-				b.setColor(newB.getColor());
-			}
+		for(Brick b : this.canvas.getBricks()) {
+			b.setColorForReport(this.colorAssigned(b.getDescription()));
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	private void resetColors() {
+		for(Brick b : this.canvas.getBricks()) {
+			b.setColor(b.getColor());
+		}
+	}
+
 	private java.awt.Image getCanvasImage() {
 		java.awt.Image canvasImage = null;
 		this.canvas.showTools(false);
+		this.assignColors();
 		canvasImage = this.canvas.getLayer().toImage(940, 570, null);
+		this.resetColors();
 		this.canvas.showTools(true);
 		return canvasImage;
 	}
-	
+
 	private void getInventory(Image canvasImage) {
-		for(Brick b : this.canvas.getBricks()) {
+		for (Brick b : this.canvas.getBricks()) {
 			boolean found = false;
 			int foundOnRow = 0;
 			int foundQuantity = 0;
-			for(int i = 0; i < this.getRowCount(); i++) {
-				final ConstructionRow row = rows.get(i);
-				//TODO: I don't like this here...need a more robust solution for equals in Brick
-				if(row.getCut().getDescription().equals(b.getDescription())) {
+			for (int i = 0; i < this.getRowCount(); i++) {
+				final ConstructionRow row = this.rows.get(i);
+				// TODO: I don't like this here...need a more robust solution
+				// for equals in Brick
+				if (row.getCut().getDescription().equals(b.getDescription())) {
 					found = true;
 					foundOnRow = i;
 					foundQuantity = row.getCutCount();
 					break;
 				}
 			}
-			if(found) {
-				this.setValueAt(foundQuantity+1, foundOnRow, 2);
+			if (found) {
+				this.setValueAt(foundQuantity + 1, foundOnRow, 2);
 			} else {
-				Brick newBrick = colorAssigned(b);
-				rows.add(new ConstructionRow(canvasImage,1,newBrick.getDescription(),newBrick));
+				Brick newBrick = new Brick(b.getCuttable(),this.colorAssigned(b.getDescription()));
+				this.rows.add(new ConstructionRow(canvasImage, 1, newBrick
+						.getDescription(), newBrick));
 			}
 		}
 	}
-	
-	private Brick colorAssigned(Brick b) {
-		
-		Brick returnBrick = new Brick();
-		
-		if(colorManager.containsKey(b.getDescription())) {
-			colorManagerColor = colorManager.get(b.getDescription());
+
+	private java.awt.Color colorAssigned(String cut) {
+		if (this.colorManager.containsKey(cut)) {
+			this.colorManagerColor = this.colorManager.get(cut);
 		} else {
-			adjustColors();
-			colorManagerColor = new Color(red,green,blue);
-			colorManager.put(b.getDescription(), colorManagerColor);
+			this.adjustColors();
+			this.colorManagerColor = new Color(this.red, this.green, this.blue);
+			this.colorManager.put(cut, this.colorManagerColor);
 		}
-		returnBrick.setColor(colorManagerColor);
-		returnBrick.setPathTo(b.getCuttable());
-	
-		return returnBrick;
+		return this.colorManagerColor;
 	}
-	
+
 	private void adjustColors() {
-		if(red < 255) {
-			red += 51;
-		}else if (green < 255) {
-			green += 51;
-		}else if (blue < 255) {
-			blue += 51;
+		if (this.red < 255) {
+			this.red += 51;
+		} else if (this.green < 255) {
+			this.green += 51;
+		} else if (this.blue < 255) {
+			this.blue += 51;
 		}
 	}
-	
+
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
@@ -121,7 +114,7 @@ public class ConstructionTable extends AbstractTableModel {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String getColumnName(int column) {
 		switch (column) {
@@ -136,26 +129,32 @@ public class ConstructionTable extends AbstractTableModel {
 		}
 		return null;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 */
 	public int getColumnCount() {
 		return 4;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 */
 	public int getRowCount() {
-		return rows.size();
+		return this.rows.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		final ConstructionRow row = rows.get(rowIndex);
+		final ConstructionRow row = this.rows.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
 			return row.getCanvas();
@@ -169,35 +168,36 @@ public class ConstructionTable extends AbstractTableModel {
 		return null;
 	}
 
-	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas.getInstance();
-	
+	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas
+			.getInstance();
+
 	private java.util.ArrayList<ConstructionRow> rows = null;
-	
+
 	private java.awt.Color colorManagerColor = java.awt.Color.black;
-	
+
 	private Hashtable<String, Color> colorManager = new Hashtable<String, Color>();
-	
+
 	private int red = 0;
-	
+
 	private int green = 0;
-	
+
 	private int blue = 0;
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		final ConstructionRow row = rows.get(rowIndex);
-		switch(columnIndex) {
-		case 0: 
-			row.setCanvas((java.awt.Image)aValue);
+		final ConstructionRow row = this.rows.get(rowIndex);
+		switch (columnIndex) {
+		case 0:
+			row.setCanvas((java.awt.Image) aValue);
 			break;
 		case 1:
-			row.setCut((com.stoneworks.Brick)aValue);
+			row.setCut((com.stoneworks.Brick) aValue);
 			break;
 		case 2:
 			row.setCutCount(Integer.valueOf(aValue.toString()));
 			break;
-		case 3: 
-			row.setCutDescription((String)aValue);
+		case 3:
+			row.setCutDescription((String) aValue);
 			break;
 		}
 	}

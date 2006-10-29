@@ -32,14 +32,13 @@ public class InventoryReportAction extends AbstractAction {
 
 	public void actionPerformed(ActionEvent e) {
 		BrickInventoryReport report = new BrickInventoryReport();
-		for (Brick b : canvas.getBricks()) {
+		for (Brick b : this.canvas.getBricks()) {
 			report.getTable().addBrick(b);
 		}
 		report.executeReport();
 	}
 
-
-	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas.getInstance();
-
+	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas
+			.getInstance();
 
 }

@@ -19,23 +19,24 @@ public class CutSynchronizer {
 	public CutSynchronizer(BrickCanvas canvas, CutList cutList) {
 		this.canvas = canvas;
 		this.cutList = cutList;
-		this.canvas.addPropertyChangeListener(
-			BrickCanvas.PROPERTY_BRICK_ADDED, new PropertyChangeListener() {
+		this.canvas.addPropertyChangeListener(BrickCanvas.PROPERTY_BRICK_ADDED,
+				new PropertyChangeListener() {
 
-				public void propertyChange(PropertyChangeEvent evt) {
-					Brick brick = (Brick)evt.getNewValue();
-					brick.addPropertyChangeListener(Brick.PROPERTY_CUT,new CutListener());
-				}
+					public void propertyChange(PropertyChangeEvent evt) {
+						Brick brick = (Brick) evt.getNewValue();
+						brick.addPropertyChangeListener(Brick.PROPERTY_CUT,
+								new CutListener());
+					}
 
-			});
+				});
 	}
 
 	public BrickCanvas getCanvas() {
-		return canvas;
+		return this.canvas;
 	}
 
 	public CutList getCutList() {
-		return cutList;
+		return this.cutList;
 	}
 
 	public void setCanvas(BrickCanvas canvas) {
@@ -55,10 +56,11 @@ public class CutSynchronizer {
 		public void propertyChange(final PropertyChangeEvent evt) {
 			Brick brick = (Brick) evt.getSource();
 			if (evt.getPropertyName().equals(Brick.PROPERTY_CUT)) {
-				if (!getCutList().contains(brick)) {
-					Brick copy = new Brick((Shape)brick.getPathReference().clone());
+				if (!CutSynchronizer.this.getCutList().contains(brick)) {
+					Brick copy = new Brick((Shape) brick.getPathReference()
+							.clone());
 					copy.setColor(brick.getColor());
-					getCutList().addElement(copy);
+					CutSynchronizer.this.getCutList().addElement(copy);
 				}
 			}
 		}

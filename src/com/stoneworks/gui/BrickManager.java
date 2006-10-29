@@ -39,7 +39,7 @@ public class BrickManager extends JPanel {
 	 */
 	public BrickManager() {
 		super();
-		initialize();
+		this.initialize();
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class BrickManager extends JPanel {
 	 */
 	public BrickManager(boolean isDoubleBuffered) {
 		super(isDoubleBuffered);
-		initialize();
+		this.initialize();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class BrickManager extends JPanel {
 	 */
 	public BrickManager(LayoutManager layout) {
 		super(layout);
-		initialize();
+		this.initialize();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class BrickManager extends JPanel {
 	 */
 	public BrickManager(LayoutManager layout, boolean isDoubleBuffered) {
 		super(layout, isDoubleBuffered);
-		initialize();
+		this.initialize();
 	}
 
 	/**
@@ -73,35 +73,36 @@ public class BrickManager extends JPanel {
 	 * @return javax.swing.JButton
 	 */
 	private JButton getAddBrick() {
-		if (addBrick == null) {
-			addBrick = new JButton();
-			addBrick.setText("Add Brick");
-			addBrick.addActionListener(new java.awt.event.ActionListener() {
+		if (this.addBrick == null) {
+			this.addBrick = new JButton();
+			this.addBrick.setText("Add Brick");
+			this.addBrick.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					StandardMeasurement width = getWidthMeasurement()
+					StandardMeasurement width = BrickManager.this.getWidthMeasurement()
 							.getMeasurement();
-					StandardMeasurement length = getLengthMeasurement()
+					StandardMeasurement length = BrickManager.this.getLengthMeasurement()
 							.getMeasurement();
 					java.awt.geom.Rectangle2D rect = new java.awt.geom.Rectangle2D.Double(
 							0, 0, width.screenValue(), length.screenValue());
 					java.awt.geom.Area shape = new java.awt.geom.Area(rect);
 					com.stoneworks.Brick brick = new com.stoneworks.Brick(
-							shape, getColorPanel().getBackground());
-					if (!getCutList().contains(brick)) {
-						getCutList().addElement(brick);
+							shape, BrickManager.this.getColorPanel().getBackground());
+					if (!BrickManager.this.getCutList().contains(brick)) {
+						BrickManager.this.getCutList().addElement(brick);
 					}
 				}
 			});
 		}
-		return addBrick;
+		return this.addBrick;
 	}
 
 	public CutList getCutList() {
-		if (cutListModel == null) {
-			cutListModel = new CutList();
+		if (this.cutListModel == null) {
+			this.cutListModel = new CutList();
 		}
-		return cutListModel;
+		return this.cutListModel;
 	}
+
 	/**
 	 * 
 	 * @param c
@@ -110,13 +111,14 @@ public class BrickManager extends JPanel {
 		this.cutListModel = c;
 		this.cutList.setModel(this.cutListModel);
 	}
+
 	/**
 	 * This method initializes brickEditor
 	 * 
 	 * @return JPanel
 	 */
 	private JPanel getBrickEditor() {
-		if (brickEditor == null) {
+		if (this.brickEditor == null) {
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 2;
 			gridBagConstraints11.gridy = 2;
@@ -129,45 +131,45 @@ public class BrickManager extends JPanel {
 			gridBagConstraints6.gridy = 0;
 			gridBagConstraints6.gridwidth = 2;
 			gridBagConstraints6.weightx = 1.0;
-			brickEditor = new JPanel();
-			brickEditor.setLayout(new GridBagLayout());
-			brickEditor.setBorder(BorderFactory.createTitledBorder(null,
+			this.brickEditor = new JPanel();
+			this.brickEditor.setLayout(new GridBagLayout());
+			this.brickEditor.setBorder(BorderFactory.createTitledBorder(null,
 					"Brick Maker", TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, null, null));
 			GridBagConstraints widthLabelConstraints = new GridBagConstraints();
 			widthLabelConstraints.gridx = 0;
 			widthLabelConstraints.gridy = 0;
-			widthLabel = new JLabel();
-			widthLabel.setText("Width:");
-			brickEditor.add(widthLabel, widthLabelConstraints);
+			this.widthLabel = new JLabel();
+			this.widthLabel.setText("Width:");
+			this.brickEditor.add(this.widthLabel, widthLabelConstraints);
 			GridBagConstraints lengthLabelConstraints = new GridBagConstraints();
 			lengthLabelConstraints.gridx = 0;
 			lengthLabelConstraints.gridy = 1;
-			lengthLabel = new JLabel();
-			lengthLabel.setText("Length:");
-			brickEditor.add(lengthLabel, lengthLabelConstraints);
+			this.lengthLabel = new JLabel();
+			this.lengthLabel.setText("Length:");
+			this.brickEditor.add(this.lengthLabel, lengthLabelConstraints);
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 2;
-			colorLabel = new JLabel();
-			colorLabel.setText("Color:");
-			brickEditor.add(colorLabel, gridBagConstraints);
+			this.colorLabel = new JLabel();
+			this.colorLabel.setText("Color:");
+			this.brickEditor.add(this.colorLabel, gridBagConstraints);
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 1;
 			gridBagConstraints2.gridy = 2;
-			brickEditor.add(getColorButton(), gridBagConstraints2);
+			this.brickEditor.add(this.getColorButton(), gridBagConstraints2);
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 0;
 			gridBagConstraints5.gridy = 3;
 			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridwidth = 3;
-			brickEditor.add(getAddBrick(), gridBagConstraints5);
-			brickEditor.add(getWidthMeasurement(), gridBagConstraints6);
-			brickEditor.add(getLengthMeasurement(), gridBagConstraints7);
-			brickEditor.add(getColorPanel(), gridBagConstraints11);
+			this.brickEditor.add(this.getAddBrick(), gridBagConstraints5);
+			this.brickEditor.add(this.getWidthMeasurement(), gridBagConstraints6);
+			this.brickEditor.add(this.getLengthMeasurement(), gridBagConstraints7);
+			this.brickEditor.add(this.getColorPanel(), gridBagConstraints11);
 		}
-		return brickEditor;
+		return this.brickEditor;
 	}
 
 	/**
@@ -176,20 +178,21 @@ public class BrickManager extends JPanel {
 	 * @return javax.swing.JButton
 	 */
 	private JButton getColorButton() {
-		if (colorButton == null) {
-			colorButton = new JButton();
-			colorButton.setText("Choose...");
-			colorButton.addActionListener(new java.awt.event.ActionListener() {
+		if (this.colorButton == null) {
+			this.colorButton = new JButton();
+			this.colorButton.setText("Choose...");
+			this.colorButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Thread colorThread = new Thread() {
+						@Override
 						public void run() {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									Color color = JColorChooser.showDialog(
-											getBrickEditor(),
+											BrickManager.this.getBrickEditor(),
 											"Pick a color for the brick",
 											Color.ORANGE);
-									getColorPanel().setBackground(color);
+									BrickManager.this.getColorPanel().setBackground(color);
 								}
 							});
 						}
@@ -198,7 +201,7 @@ public class BrickManager extends JPanel {
 				}
 			});
 		}
-		return colorButton;
+		return this.colorButton;
 	}
 
 	/**
@@ -207,16 +210,16 @@ public class BrickManager extends JPanel {
 	 * @return javax.swing.JList
 	 */
 	private JList getJList() {
-		if (cutList == null) {
-			cutList = new JList();
-			cutList.setModel(getCutList());
-			cutList.setDragEnabled(true);
-			cutList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			cutList.setCellRenderer(new com.stoneworks.gui.BrickLabel());
-			cutList
+		if (this.cutList == null) {
+			this.cutList = new JList();
+			this.cutList.setModel(this.getCutList());
+			this.cutList.setDragEnabled(true);
+			this.cutList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			this.cutList.setCellRenderer(new com.stoneworks.gui.BrickLabel());
+			this.cutList
 					.setTransferHandler(new com.stoneworks.BrickTransferHandler());
 		}
-		return cutList;
+		return this.cutList;
 	}
 
 	/**
@@ -225,11 +228,11 @@ public class BrickManager extends JPanel {
 	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScroll() {
-		if (jScroll == null) {
-			jScroll = new JScrollPane();
-			jScroll.setViewportView(getJList());
+		if (this.jScroll == null) {
+			this.jScroll = new JScrollPane();
+			this.jScroll.setViewportView(this.getJList());
 		}
-		return jScroll;
+		return this.jScroll;
 	}
 
 	/**
@@ -238,19 +241,19 @@ public class BrickManager extends JPanel {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getCutListPanel() {
-		if (cutListPanel == null) {
+		if (this.cutListPanel == null) {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0;
 			gridBagConstraints1.weightx = 1.0;
-			cutListPanel = new JPanel();
-			cutListPanel.setLayout(new GridBagLayout());
-			cutListPanel.setBorder(BorderFactory.createTitledBorder(null,
+			this.cutListPanel = new JPanel();
+			this.cutListPanel.setLayout(new GridBagLayout());
+			this.cutListPanel.setBorder(BorderFactory.createTitledBorder(null,
 					"Brick Cut List", TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, null, null));
-			cutListPanel.add(getJScroll(), gridBagConstraints1);
+			this.cutListPanel.add(this.getJScroll(), gridBagConstraints1);
 		}
-		return cutListPanel;
+		return this.cutListPanel;
 	}
 
 	/**
@@ -262,8 +265,8 @@ public class BrickManager extends JPanel {
 		this.setSize(200, 400);
 		this.setPreferredSize(new Dimension(200, 400));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(getBrickEditor(), null);
-		this.add(getCutListPanel(), null);
+		this.add(this.getBrickEditor(), null);
+		this.add(this.getCutListPanel(), null);
 	}
 
 	private JButton addBrick = null;
@@ -298,10 +301,10 @@ public class BrickManager extends JPanel {
 	 * @return com.stoneworks.gui.MeasurementPanel
 	 */
 	private MeasurementPanel getWidthMeasurement() {
-		if (widthMeasurement == null) {
-			widthMeasurement = new MeasurementPanel();
+		if (this.widthMeasurement == null) {
+			this.widthMeasurement = new MeasurementPanel();
 		}
-		return widthMeasurement;
+		return this.widthMeasurement;
 	}
 
 	/**
@@ -310,10 +313,10 @@ public class BrickManager extends JPanel {
 	 * @return com.stoneworks.gui.MeasurementPanel
 	 */
 	private MeasurementPanel getLengthMeasurement() {
-		if (lengthMeasurement == null) {
-			lengthMeasurement = new MeasurementPanel();
+		if (this.lengthMeasurement == null) {
+			this.lengthMeasurement = new MeasurementPanel();
 		}
-		return lengthMeasurement;
+		return this.lengthMeasurement;
 	}
 
 	/**
@@ -322,16 +325,16 @@ public class BrickManager extends JPanel {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getColorPanel() {
-		if (colorPanel == null) {
-			colorPanel = new JPanel();
-			colorPanel.setLayout(null);
-			colorPanel.setBackground(new java.awt.Color(102, 51, 0));
-			colorPanel.setToolTipText("The color of the Brick");
-			colorPanel.setBorder(BorderFactory
+		if (this.colorPanel == null) {
+			this.colorPanel = new JPanel();
+			this.colorPanel.setLayout(null);
+			this.colorPanel.setBackground(new java.awt.Color(102, 51, 0));
+			this.colorPanel.setToolTipText("The color of the Brick");
+			this.colorPanel.setBorder(BorderFactory
 					.createEtchedBorder(EtchedBorder.LOWERED));
-			colorPanel.setPreferredSize(new Dimension(15, 15));
+			this.colorPanel.setPreferredSize(new Dimension(15, 15));
 		}
-		return colorPanel;
+		return this.colorPanel;
 	}
 
 }

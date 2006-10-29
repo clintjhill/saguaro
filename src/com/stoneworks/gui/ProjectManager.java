@@ -49,19 +49,19 @@ public class ProjectManager extends JPanel {
 	private JTextField clientTextField = null;
 
 	private JButton imageButton = null;
-	
+
 	private PCanvas imageCanvas = null;
-	
+
 	private BrickCanvas brickCanvas = null;
 
 	private JSlider imageTransparency = null;
-	
+
 	/**
 	 * 
 	 */
 	public ProjectManager() {
 		super();
-		initialize();
+		this.initialize();
 	}
 
 	/**
@@ -71,57 +71,67 @@ public class ProjectManager extends JPanel {
 	 */
 	private void initialize() {
 		this.setSize(210, 400);
-		this.setPreferredSize(new Dimension(210,400));
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.add(getProjectPanel(), null);
-		this.add(getImagePanel(), null);
+		this.setPreferredSize(new Dimension(210, 400));
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.add(this.getProjectPanel(), null);
+		this.add(this.getImagePanel(), null);
 	}
 
 	/**
 	 * Sets the name of the client to the proper text field
+	 * 
 	 * @param n
 	 */
 	public void setClientName(String n) {
 		this.clientTextField.setText(n);
 	}
+
 	/**
 	 * Returns the name of the client from the Client Text Field
+	 * 
 	 * @return
 	 */
 	public String getClientName() {
 		return this.clientTextField.getText();
 	}
+
 	/**
 	 * Sets the name of the project to the proper text field
+	 * 
 	 * @param n
 	 */
 	public void setProjectName(String n) {
 		this.nameTextField.setText(n);
 	}
+
 	/**
 	 * Returns the name of the Project from the Name Text Field
+	 * 
 	 * @return
 	 */
 	public String getProjectName() {
 		return this.nameTextField.getText();
 	}
+
 	/**
 	 * This sets the BrickCanvas which is used to apply a background image
+	 * 
 	 * @param c
 	 */
 	public void setBrickCanvas(BrickCanvas c) {
 		this.brickCanvas = c;
-		getImageCanvas().getLayer().removeAllChildren();
-		getImageCanvas().getLayer().addChild((BackgroundImage)brickCanvas.getBackgroundImage().clone());
+		this.getImageCanvas().getLayer().removeAllChildren();
+		this.getImageCanvas().getLayer().addChild(
+				(BackgroundImage) this.brickCanvas.getBackgroundImage().clone());
 	}
-	
+
 	/**
 	 * This method initializes projectPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getProjectPanel() {
-		if (projectPanel == null) {
+		if (this.projectPanel == null) {
 			Insets textFieldInsets = new Insets(5, 3, 5, 3);
 			GridBagConstraints clientTextFieldConstraints = new GridBagConstraints();
 			clientTextFieldConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -139,22 +149,24 @@ public class ProjectManager extends JPanel {
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridx = 0;
 			gridBagConstraints1.gridy = 1;
-			clientLabel = new JLabel();
-			clientLabel.setText("Client:");
+			this.clientLabel = new JLabel();
+			this.clientLabel.setText("Client:");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
-			nameLabel = new JLabel();
-			nameLabel.setText("Name:");
-			projectPanel = new JPanel();
-			projectPanel.setLayout(new GridBagLayout());
-			projectPanel.setBorder(BorderFactory.createTitledBorder(null, "Project Information", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-			projectPanel.add(nameLabel, gridBagConstraints);
-			projectPanel.add(clientLabel, gridBagConstraints1);
-			projectPanel.add(getNameTextField(), nameTextFieldConstraints);
-			projectPanel.add(getClientTextField(), clientTextFieldConstraints);
+			this.nameLabel = new JLabel();
+			this.nameLabel.setText("Name:");
+			this.projectPanel = new JPanel();
+			this.projectPanel.setLayout(new GridBagLayout());
+			this.projectPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Project Information", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
+			this.projectPanel.add(this.nameLabel, gridBagConstraints);
+			this.projectPanel.add(this.clientLabel, gridBagConstraints1);
+			this.projectPanel.add(this.getNameTextField(), nameTextFieldConstraints);
+			this.projectPanel.add(this.getClientTextField(), clientTextFieldConstraints);
 		}
-		return projectPanel;
+		return this.projectPanel;
 	}
 
 	/**
@@ -163,7 +175,7 @@ public class ProjectManager extends JPanel {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getImagePanel() {
-		if (imagePanel == null) {
+		if (this.imagePanel == null) {
 			GridBagConstraints imageTransparencyConstraints = new GridBagConstraints();
 			imageTransparencyConstraints.fill = GridBagConstraints.HORIZONTAL;
 			imageTransparencyConstraints.gridy = 2;
@@ -172,38 +184,42 @@ public class ProjectManager extends JPanel {
 			GridBagConstraints imageCanvasConstraints = new GridBagConstraints();
 			imageCanvasConstraints.gridx = 0;
 			imageCanvasConstraints.gridy = 0;
-			imageCanvasConstraints.insets = new Insets(10,10,10,10);
+			imageCanvasConstraints.insets = new Insets(10, 10, 10, 10);
 			GridBagConstraints imageButtonConstraints = new GridBagConstraints();
 			imageButtonConstraints.gridx = 0;
 			imageButtonConstraints.gridy = 1;
-			imagePanel = new JPanel();
-			imagePanel.setLayout(new GridBagLayout());
-			imagePanel.setBorder(BorderFactory.createTitledBorder(null, "Background Image", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-			imagePanel.add(getImageCanvas(), imageCanvasConstraints);
-			imagePanel.add(getImageButton(), imageButtonConstraints);
-			imagePanel.add(getImageTransparency(), imageTransparencyConstraints);
+			this.imagePanel = new JPanel();
+			this.imagePanel.setLayout(new GridBagLayout());
+			this.imagePanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Background Image", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, null));
+			this.imagePanel.add(this.getImageCanvas(), imageCanvasConstraints);
+			this.imagePanel.add(this.getImageButton(), imageButtonConstraints);
+			this.imagePanel
+					.add(this.getImageTransparency(), imageTransparencyConstraints);
 		}
-		return imagePanel;
+		return this.imagePanel;
 	}
 
 	private PCanvas getImageCanvas() {
-		if(imageCanvas == null) {
-			imageCanvas = new PCanvas();
-			imageCanvas.setPreferredSize(new Dimension(120,120));
-			imageCanvas.setSize(new Dimension(120,120));
+		if (this.imageCanvas == null) {
+			this.imageCanvas = new PCanvas();
+			this.imageCanvas.setPreferredSize(new Dimension(120, 120));
+			this.imageCanvas.setSize(new Dimension(120, 120));
 		}
-		return imageCanvas;
+		return this.imageCanvas;
 	}
+
 	/**
 	 * This method initializes nameTextField
 	 * 
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getNameTextField() {
-		if (nameTextField == null) {
-			nameTextField = new JTextField();
+		if (this.nameTextField == null) {
+			this.nameTextField = new JTextField();
 		}
-		return nameTextField;
+		return this.nameTextField;
 	}
 
 	/**
@@ -212,24 +228,25 @@ public class ProjectManager extends JPanel {
 	 * @return javax.swing.JTextField
 	 */
 	private JTextField getClientTextField() {
-		if (clientTextField == null) {
-			clientTextField = new JTextField();
+		if (this.clientTextField == null) {
+			this.clientTextField = new JTextField();
 		}
-		return clientTextField;
+		return this.clientTextField;
 	}
 
 	/**
-	 * This method initializes imageButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes imageButton
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getImageButton() {
-		if (imageButton == null) {
-			imageButton = new JButton();
-			imageButton.setText("Choose...");
-			imageButton.addActionListener(new java.awt.event.ActionListener() {
+		if (this.imageButton == null) {
+			this.imageButton = new JButton();
+			this.imageButton.setText("Choose...");
+			this.imageButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Thread imageFile = new Thread() {
+						@Override
 						public void run() {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
@@ -238,10 +255,15 @@ public class ProjectManager extends JPanel {
 											ProjectManager.this,
 											"Choose Image File");
 									if (option == JFileChooser.APPROVE_OPTION) {
-										BackgroundImage image = new BackgroundImage(chooser.getSelectedFile().getPath());
-										image.setBounds(0.0,0.0,120.0,120.0);
-										getImageCanvas().getLayer().addChild((BackgroundImage)image.clone());
-										brickCanvas.setBackgroundImage(image);
+										BackgroundImage image = new BackgroundImage(
+												chooser.getSelectedFile()
+														.getPath());
+										image.setBounds(0.0, 0.0, 120.0, 120.0);
+										ProjectManager.this.getImageCanvas().getLayer()
+												.addChild(
+														(BackgroundImage) image
+																.clone());
+										ProjectManager.this.brickCanvas.setBackgroundImage(image);
 									}
 								}
 							});
@@ -251,28 +273,30 @@ public class ProjectManager extends JPanel {
 				}
 			});
 		}
-		return imageButton;
+		return this.imageButton;
 	}
 
 	/**
-	 * This method initializes imageTransparency	
-	 * 	
-	 * @return javax.swing.JSlider	
+	 * This method initializes imageTransparency
+	 * 
+	 * @return javax.swing.JSlider
 	 */
 	private JSlider getImageTransparency() {
-		if (imageTransparency == null) {
-			imageTransparency = new JSlider();
-			imageTransparency.setMajorTickSpacing(5);
-			imageTransparency.setValue(100);
-			imageTransparency.setPaintTicks(true);
-			imageTransparency.addChangeListener(new javax.swing.event.ChangeListener() {
-				public void stateChanged(javax.swing.event.ChangeEvent e) {
-					float transparency = imageTransparency.getValue()*.01F;
-					brickCanvas.getBackgroundImage().setTransparency(transparency);
-				}
-			});
+		if (this.imageTransparency == null) {
+			this.imageTransparency = new JSlider();
+			this.imageTransparency.setMajorTickSpacing(5);
+			this.imageTransparency.setValue(100);
+			this.imageTransparency.setPaintTicks(true);
+			this.imageTransparency
+					.addChangeListener(new javax.swing.event.ChangeListener() {
+						public void stateChanged(javax.swing.event.ChangeEvent e) {
+							float transparency = ProjectManager.this.imageTransparency.getValue() * .01F;
+							ProjectManager.this.brickCanvas.getBackgroundImage().setTransparency(
+									transparency);
+						}
+					});
 		}
-		return imageTransparency;
+		return this.imageTransparency;
 	}
 
 }

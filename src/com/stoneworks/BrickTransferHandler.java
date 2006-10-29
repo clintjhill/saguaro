@@ -43,8 +43,9 @@ public class BrickTransferHandler extends TransferHandler {
 	@Override
 	public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
 		DataFlavor brickFlavor;
-		if (comp instanceof JList)
+		if (comp instanceof JList) {
 			return false;
+		}
 		try {
 			brickFlavor = new DataFlavor(Brick.FLAVOR_NAME);
 		} catch (ClassNotFoundException e) {
@@ -70,20 +71,20 @@ public class BrickTransferHandler extends TransferHandler {
 
 	@Override
 	public void exportAsDrag(JComponent comp, InputEvent e, int action) {
-		
+
 		super.exportAsDrag(comp, e, action);
 	}
 
 	@Override
 	protected void exportDone(JComponent source, Transferable data, int action) {
-		
+
 		super.exportDone(source, data, action);
 	}
 
 	@Override
 	public void exportToClipboard(JComponent comp, Clipboard clip, int action)
 			throws IllegalStateException {
-		
+
 		super.exportToClipboard(comp, clip, action);
 	}
 
@@ -94,7 +95,7 @@ public class BrickTransferHandler extends TransferHandler {
 
 	@Override
 	public Icon getVisualRepresentation(Transferable t) {
-		
+
 		return super.getVisualRepresentation(t);
 	}
 
@@ -108,9 +109,10 @@ public class BrickTransferHandler extends TransferHandler {
 						.getTransferData(new java.awt.datatransfer.DataFlavor(
 								com.stoneworks.Brick.FLAVOR_NAME));
 				Point2D globalPoint = comp.getMousePosition();
-				Point2D localPoint = canvas.getCamera().localToView(globalPoint);
-				double x = localPoint.getX()-(brick.getWidth()/2);
-				double y = localPoint.getY()-(brick.getHeight()/2);
+				Point2D localPoint = canvas.getCamera()
+						.localToView(globalPoint);
+				double x = localPoint.getX() - (brick.getWidth() / 2);
+				double y = localPoint.getY() - (brick.getHeight() / 2);
 				brick.translate(x, y);
 			} catch (UnsupportedFlavorException e) {
 				e.printStackTrace();

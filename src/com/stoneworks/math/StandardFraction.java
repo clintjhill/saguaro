@@ -30,8 +30,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /**
-*
-*/
+ *
+ */
 package com.stoneworks.math;
 
 import java.math.BigDecimal;
@@ -40,12 +40,13 @@ import java.util.TreeMap;
 
 /**
  * @author clinthill
- *
+ * 
  */
 public class StandardFraction {
 
 	/**
-	 * Receives an double value that represents the remainder of a complex number.
+	 * Receives an double value that represents the remainder of a complex
+	 * number.
 	 * 
 	 * @param original
 	 *            original double value to process
@@ -53,54 +54,64 @@ public class StandardFraction {
 	 */
 	public StandardFraction(double original) {
 		if (original < 1.0D) {
-			originalValue = original;
+			this.originalValue = original;
 		} else {
 			throw new java.lang.NumberFormatException(
 					"Value must be less than 1.0 in order to perform fraction.");
 		}
 	}
 
-
 	@SuppressWarnings("unchecked")
 	private void findSmallestRemainder() {
-		if (!resultsSet)
-			setResults();
+		if (!this.resultsSet) {
+			this.setResults();
+		}
 		ComplexNumber.RemainderComparator remainderComparator = new ComplexNumber.RemainderComparator();
 		TreeMap<ComplexNumber, Integer> remainders = new TreeMap<ComplexNumber, Integer>(
 				remainderComparator);
-		if (getWholeNumberOrZero(this.halfResult) == 0)
+		if (this.getWholeNumberOrZero(this.halfResult) == 0) {
 			remainders.put(new ComplexNumber(this.halfResult), 2);
-		if (getWholeNumberOrZero(this.quarterResult) == 0)
+		}
+		if (this.getWholeNumberOrZero(this.quarterResult) == 0) {
 			remainders.put(new ComplexNumber(this.quarterResult), 4);
-		if (getWholeNumberOrZero(this.eighthResult) == 0)
+		}
+		if (this.getWholeNumberOrZero(this.eighthResult) == 0) {
 			remainders.put(new ComplexNumber(this.eighthResult), 8);
-		if (getWholeNumberOrZero(this.sixteenthResult) == 0)
+		}
+		if (this.getWholeNumberOrZero(this.sixteenthResult) == 0) {
 			remainders.put(new ComplexNumber(this.sixteenthResult), 16);
-		if (getWholeNumberOrZero(this.thirtySecondResult) == 0)
+		}
+		if (this.getWholeNumberOrZero(this.thirtySecondResult) == 0) {
 			remainders.put(new ComplexNumber(this.thirtySecondResult), 32);
+		}
 
 		this.numerator = remainders.firstKey().getWhole();
-		this.denominator = (int) remainders.get(remainders.firstKey());
+		this.denominator = remainders.get(remainders.firstKey());
 	}
 
 	private boolean foundSmallestWholeNumber() {
-		if (!resultsSet)
-			setResults();
-		// take all of the results from the division and run them through the tree map
+		if (!this.resultsSet) {
+			this.setResults();
+		}
+		// take all of the results from the division and run them through the
+		// tree map
 		// to assist with finding the least whole number
 		TreeMap<Integer, Integer> wholeNumber = new TreeMap<Integer, Integer>();
-		wholeNumber.put(getWholeNumberOrZero(this.halfResult), 2);
-		wholeNumber.put(getWholeNumberOrZero(this.quarterResult), 4);
-		wholeNumber.put(getWholeNumberOrZero(this.eighthResult), 8);
-		wholeNumber.put(getWholeNumberOrZero(this.sixteenthResult), 16);
-		wholeNumber.put(getWholeNumberOrZero(this.thirtySecondResult), 32);
-		// if the wholeNumber tree has a count of more than one key then it has a whole number
-		// to use for us. Otherwise it only found 0's. grab the first key and the first value
+		wholeNumber.put(this.getWholeNumberOrZero(this.halfResult), 2);
+		wholeNumber.put(this.getWholeNumberOrZero(this.quarterResult), 4);
+		wholeNumber.put(this.getWholeNumberOrZero(this.eighthResult), 8);
+		wholeNumber.put(this.getWholeNumberOrZero(this.sixteenthResult), 16);
+		wholeNumber.put(this.getWholeNumberOrZero(this.thirtySecondResult), 32);
+		// if the wholeNumber tree has a count of more than one key then it has
+		// a whole number
+		// to use for us. Otherwise it only found 0's. grab the first key and
+		// the first value
 		// (numerator,denominator) after removing the 0 key
 		if (wholeNumber.size() > 1) {
 			wholeNumber.remove(0);
 			this.numerator = Integer.valueOf(wholeNumber.firstKey().toString());
-			this.denominator = Integer.valueOf(wholeNumber.get(wholeNumber.firstKey()).toString());
+			this.denominator = Integer.valueOf(wholeNumber.get(
+					wholeNumber.firstKey()).toString());
 			return true;
 		}
 		return false;
@@ -110,41 +121,44 @@ public class StandardFraction {
 	 * @return Returns the denominator.
 	 */
 	public int getDenominator() {
-		if (!operationPerformed)
-			performOperation();
-		return denominator;
+		if (!this.operationPerformed) {
+			this.performOperation();
+		}
+		return this.denominator;
 	}
 
 	/**
 	 * @return Returns the numerator.
 	 */
 	public int getNumerator() {
-		if (!operationPerformed)
-			performOperation();
-		return numerator;
+		if (!this.operationPerformed) {
+			this.performOperation();
+		}
+		return this.numerator;
 	}
 
 	/**
 	 * @return Returns the originalValue.
 	 */
 	public double getOriginalValue() {
-		return originalValue;
+		return this.originalValue;
 	}
 
 	/**
-	 * Rounds the original double value passed to this class into at most a 4 digit number
+	 * Rounds the original double value passed to this class into at most a 4
+	 * digit number
 	 * 
 	 * @return double
 	 */
 	private double getRoundedOriginal() {
-		String origStringValue = String.valueOf(originalValue);
+		String origStringValue = String.valueOf(this.originalValue);
 		if (origStringValue.length() > 6) {
 			MathContext mc = new MathContext(6);
-			BigDecimal bigDec = new BigDecimal(originalValue, mc);
+			BigDecimal bigDec = new BigDecimal(this.originalValue, mc);
 			bigDec = bigDec.round(mc);
 			return bigDec.doubleValue();
 		}
-		return originalValue;
+		return this.originalValue;
 	}
 
 	/**
@@ -157,13 +171,16 @@ public class StandardFraction {
 		String wholeString = String.valueOf(result);
 		// if there is a point in the double let's parse it for the whole number
 		if (wholeString.indexOf(".") > -1) {
-			// if the digits behind the decimal are not zero then it isn't a whole number and return
+			// if the digits behind the decimal are not zero then it isn't a
+			// whole number and return
 			// zero
-			if (!wholeString.substring(wholeString.indexOf(".") + 1).equals("0")) {
+			if (!wholeString.substring(wholeString.indexOf(".") + 1)
+					.equals("0")) {
 				whole = 0;
 			} else {
 				// this is a whole number so parse off the decimal and return it
-				whole = Integer.valueOf(wholeString.substring(0, wholeString.indexOf(".")));
+				whole = Integer.valueOf(wholeString.substring(0, wholeString
+						.indexOf(".")));
 			}
 		} else {
 			// if it didn't have a decimal then return it whole
@@ -173,12 +190,13 @@ public class StandardFraction {
 	}
 
 	private void performOperation() {
-		// if the least whole number doesn't exist and we have all complex doubles then
+		// if the least whole number doesn't exist and we have all complex
+		// doubles then
 		// let's sort those for least remainder
-		if (!foundSmallestWholeNumber()) {
-			findSmallestRemainder();
+		if (!this.foundSmallestWholeNumber()) {
+			this.findSmallestRemainder();
 		}
-		operationPerformed = true;
+		this.operationPerformed = true;
 	}
 
 	/**
@@ -193,14 +211,14 @@ public class StandardFraction {
 
 	private void setResults() {
 		// use the rounded in double form to keep types alike on division
-		double roundedOriginal = getRoundedOriginal();
+		double roundedOriginal = this.getRoundedOriginal();
 		// perform division on all sizes using scale
-		this.halfResult = roundedOriginal / half;
-		this.quarterResult = roundedOriginal / quarter;
-		this.eighthResult = roundedOriginal / eighth;
-		this.sixteenthResult = roundedOriginal / sixteenth;
-		this.thirtySecondResult = roundedOriginal / thirtySecond;
-		resultsSet = true;
+		this.halfResult = roundedOriginal / this.half;
+		this.quarterResult = roundedOriginal / this.quarter;
+		this.eighthResult = roundedOriginal / this.eighth;
+		this.sixteenthResult = roundedOriginal / this.sixteenth;
+		this.thirtySecondResult = roundedOriginal / this.thirtySecond;
+		this.resultsSet = true;
 	}
 
 	private int denominator = 0;

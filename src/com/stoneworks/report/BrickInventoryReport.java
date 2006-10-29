@@ -20,7 +20,7 @@ public class BrickInventoryReport {
 	 * 
 	 */
 	public BrickInventoryReport() {
-		table = new BrickInventoryTable(false);
+		this.table = new BrickInventoryTable(false);
 		JFreeReportBoot.getInstance().start();
 	}
 
@@ -37,7 +37,8 @@ public class BrickInventoryReport {
 			report.setData(this.table);
 
 			final PreviewDialog frame = new PreviewDialog(report);
-			frame.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
+			frame
+					.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
 			frame.pack();
 			RefineryUtilities.positionFrameRandomly(frame);
 			frame.setVisible(true);
@@ -47,7 +48,7 @@ public class BrickInventoryReport {
 	}
 
 	public BrickInventoryTable getTable() {
-		return table;
+		return this.table;
 	}
 
 	public void setTable(BrickInventoryTable table) {

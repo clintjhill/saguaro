@@ -17,6 +17,7 @@ public final class DesignReviewTable extends AbstractTableModel {
 	public DesignReviewTable() {
 
 	}
+
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		return Image.class;
@@ -44,6 +45,7 @@ public final class DesignReviewTable extends AbstractTableModel {
 		return image;
 	}
 
-	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas.getInstance();
+	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas
+			.getInstance();
 
 }

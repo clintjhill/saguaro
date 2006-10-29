@@ -76,22 +76,23 @@ public class BrickCanvas extends PCanvas {
 	private BrickCanvas() {
 		this.setBackground(null);
 
-		PRoot root = getRoot();
-		final PCamera camera = getCamera();
+		PRoot root = this.getRoot();
+		final PCamera camera = this.getCamera();
 		final PLayer gridLayer = new PLayer() {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 0L;
 
+			@Override
 			protected void paint(PPaintContext paintContext) {
-				if (paintGrid) {
+				if (BrickCanvas.this.paintGrid) {
 					// make sure grid gets drawn on snap to grid boundaries. And
 					// expand a little to make sure that entire view is filled.
-					double bx = (getX() - (getX() % gridSpacing)) - gridSpacing;
-					double by = (getY() - (getY() % gridSpacing)) - gridSpacing;
-					double rightBorder = getX() + getWidth() + gridSpacing;
-					double bottomBorder = getY() + getHeight() + gridSpacing;
+					double bx = (this.getX() - (this.getX() % gridSpacing)) - gridSpacing;
+					double by = (this.getY() - (this.getY() % gridSpacing)) - gridSpacing;
+					double rightBorder = this.getX() + this.getWidth() + gridSpacing;
+					double bottomBorder = this.getY() + this.getHeight() + gridSpacing;
 
 					Graphics2D g2 = paintContext.getGraphics();
 					Rectangle2D clip = paintContext.getLocalClip();
@@ -142,7 +143,7 @@ public class BrickCanvas extends PCanvas {
 
 		gridLayer.setBounds(camera.getViewBounds());
 
-		removeInputEventListener(getPanEventHandler());
+		this.removeInputEventListener(this.getPanEventHandler());
 		PDragEventHandler dragHandler = new PDragEventHandler() {
 
 			@Override
@@ -163,8 +164,8 @@ public class BrickCanvas extends PCanvas {
 
 		};
 		dragHandler.setMoveToFrontOnPress(true);
-		addInputEventListener(dragHandler);
-		setTransferHandler(new com.stoneworks.BrickTransferHandler());
+		this.addInputEventListener(dragHandler);
+		this.setTransferHandler(new com.stoneworks.BrickTransferHandler());
 		// final PCamera camera = getCamera();
 		final PText tooltipNode = new PText();
 
@@ -172,12 +173,14 @@ public class BrickCanvas extends PCanvas {
 		camera.addChild(tooltipNode);
 
 		camera.addInputEventListener(new PBasicInputEventHandler() {
+			@Override
 			public void mouseDragged(PInputEvent event) {
-				updateToolTip(event);
+				this.updateToolTip(event);
 			}
 
+			@Override
 			public void mouseMoved(PInputEvent event) {
-				updateToolTip(event);
+				this.updateToolTip(event);
 			}
 
 			public void updateToolTip(PInputEvent event) {
@@ -204,15 +207,15 @@ public class BrickCanvas extends PCanvas {
 	 * @param b
 	 */
 	public void addBrick(Brick b) {
-		getLayer().addChild(b);
-		firePropertyChange(PROPERTY_BRICK_ADDED, null, b);
+		this.getLayer().addChild(b);
+		this.firePropertyChange(PROPERTY_BRICK_ADDED, null, b);
 	}
 
 	public BackgroundImage getBackgroundImage() {
-		if (backgroundImage == null) {
-			backgroundImage = new BackgroundImage();
+		if (this.backgroundImage == null) {
+			this.backgroundImage = new BackgroundImage();
 		}
-		return backgroundImage;
+		return this.backgroundImage;
 	}
 
 	/**
@@ -221,18 +224,19 @@ public class BrickCanvas extends PCanvas {
 	 */
 	public Collection<Brick> getBricks() {
 		Collection<Brick> bricks = new ArrayList<Brick>();
-		for (Object o : getLayer().getAllNodes()) {
-			if (o instanceof Brick)
+		for (Object o : this.getLayer().getAllNodes()) {
+			if (o instanceof Brick) {
 				bricks.add((Brick) o);
+			}
 		}
 		return bricks;
 	}
 
 	public Cutter getCutTool() {
-		if (cutTool == null) {
-			cutTool = new Cutter(this);
+		if (this.cutTool == null) {
+			this.cutTool = new Cutter(this);
 		}
-		return cutTool;
+		return this.cutTool;
 	}
 
 	/**
@@ -240,8 +244,8 @@ public class BrickCanvas extends PCanvas {
 	 * @param b
 	 */
 	public void removeBrick(Brick b) {
-		getLayer().removeChild(b);
-		firePropertyChange(PROPERTY_BRICK_REMOVED, b, null);
+		this.getLayer().removeChild(b);
+		this.firePropertyChange(PROPERTY_BRICK_REMOVED, b, null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -255,32 +259,32 @@ public class BrickCanvas extends PCanvas {
 			this.backgroundImage.setFilePath(backgroundImage.getFilePath());
 		}
 		PBoundsHandle.addBoundsHandlesTo(this.backgroundImage);
-		final java.util.ListIterator<PNode> nodes = getLayer()
+		final java.util.ListIterator<PNode> nodes = this.getLayer()
 				.getChildrenIterator();
 		while (nodes.hasNext()) {
 			PNode node = nodes.next();
 			if (node instanceof PImage) {
-				getLayer().removeChild(node);
+				this.getLayer().removeChild(node);
 				break;
 			}
 		}
-		getLayer().addChild(this.backgroundImage);
+		this.getLayer().addChild(this.backgroundImage);
 		this.backgroundImage.moveToBack();
 	}
 
 	@SuppressWarnings("unchecked")
 	public void setCutTool(Cutter cutTool) {
 		this.cutTool = cutTool;
-		final java.util.ListIterator<PNode> nodes = getLayer()
+		final java.util.ListIterator<PNode> nodes = this.getLayer()
 				.getChildrenIterator();
 		while (nodes.hasNext()) {
 			PNode node = nodes.next();
 			if (node instanceof com.stoneworks.Cutter) {
-				getLayer().removeChild(node);
+				this.getLayer().removeChild(node);
 				break;
 			}
 		}
-		getLayer().addChild(this.cutTool);
+		this.getLayer().addChild(this.cutTool);
 	}
 
 	/**
@@ -288,7 +292,7 @@ public class BrickCanvas extends PCanvas {
 	 * @param show
 	 */
 	public void showBrickStrokes(boolean show) {
-		for (Brick b : getBricks()) {
+		for (Brick b : this.getBricks()) {
 			if (show) {
 				b.setStrokePaint(java.awt.Color.gray);
 			} else {

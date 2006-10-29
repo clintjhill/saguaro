@@ -9,7 +9,7 @@ import com.stoneworks.Brick;
 
 /**
  * @author clinthill
- *
+ * 
  */
 public class ConstructionRow extends BrickInventoryRow {
 
@@ -26,7 +26,7 @@ public class ConstructionRow extends BrickInventoryRow {
 	private Image canvas = null;
 
 	public Image getCanvas() {
-		return canvas;
+		return this.canvas;
 	}
 
 	public void setCanvas(Image canvas) {

@@ -16,15 +16,15 @@ public class BrickInventoryRow {
 	}
 
 	public com.stoneworks.Brick getCut() {
-		return cut;
+		return this.cut;
 	}
 
 	public int getCutCount() {
-		return cutCount;
+		return this.cutCount;
 	}
 
 	public String getCutDescription() {
-		return cutDescription;
+		return this.cutDescription;
 	}
 
 	public void setCut(com.stoneworks.Brick cut) {

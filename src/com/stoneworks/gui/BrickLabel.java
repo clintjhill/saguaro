@@ -48,8 +48,8 @@ import javax.swing.ListCellRenderer;
 import com.stoneworks.math.StandardMeasurement;
 
 /**
- * A class that extends a JLabel and draws the shape as well as shows a description of the shape
- * using {@link StandardMeasurement}
+ * A class that extends a JLabel and draws the shape as well as shows a
+ * description of the shape using {@link StandardMeasurement}
  * 
  * @author clinthill
  * 
@@ -62,8 +62,9 @@ public class BrickLabel extends JLabel implements ListCellRenderer {
 	private static final long serialVersionUID = 1908727125599215608L;
 
 	public BrickLabel() {
-		
+
 	}
+
 	/**
 	 * Default Constructor
 	 * 
@@ -73,17 +74,17 @@ public class BrickLabel extends JLabel implements ListCellRenderer {
 		this.initialize();
 	}
 
-	
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		com.stoneworks.Brick brick = (com.stoneworks.Brick)value;
+	public Component getListCellRendererComponent(JList list, Object value,
+			int index, boolean isSelected, boolean cellHasFocus) {
+		com.stoneworks.Brick brick = (com.stoneworks.Brick) value;
 		this.brick = brick;
 		this.initialize();
 		return this;
 	}
-	
+
 	private void initialize() {
-		setIcon(new ShapeIcon(this.brick.getCuttable(),this.brick.getColor()));
-		setText(this.brick.getDescription());
+		this.setIcon(new ShapeIcon(this.brick.getCuttable(), this.brick.getColor()));
+		this.setText(this.brick.getDescription());
 	}
 
 	private com.stoneworks.Brick brick = null;
@@ -118,7 +119,7 @@ public class BrickLabel extends JLabel implements ListCellRenderer {
 		 * @see javax.swing.Icon#getIconHeight()
 		 */
 		public int getIconHeight() {
-			return shape.getBounds().height+5;
+			return this.shape.getBounds().height + 5;
 		}
 
 		/**
@@ -132,7 +133,7 @@ public class BrickLabel extends JLabel implements ListCellRenderer {
 		 * @see javax.swing.Icon#getIconWidth()
 		 */
 		public int getIconWidth() {
-			return shape.getBounds().width+5;
+			return this.shape.getBounds().width + 5;
 		}
 
 		/**
@@ -146,13 +147,16 @@ public class BrickLabel extends JLabel implements ListCellRenderer {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see javax.swing.Icon#paintIcon(java.awt.Component, java.awt.Graphics, int, int)
+		 * @see javax.swing.Icon#paintIcon(java.awt.Component,
+		 *      java.awt.Graphics, int, int)
 		 */
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			Graphics2D g2d = (Graphics2D) g;
-			RenderingHints renderHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+			RenderingHints renderHints = new RenderingHints(
+					RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
-			renderHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			renderHints.put(RenderingHints.KEY_RENDERING,
+					RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHints(renderHints);
 			AffineTransform currentTransform = g2d.getTransform();
 			g2d.translate(2, 2);

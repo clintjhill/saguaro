@@ -12,7 +12,7 @@ import org.jfree.util.ObjectUtilities;
 
 /**
  * @author clinthill
- *
+ * 
  */
 public class BrickTemplateReport {
 
@@ -20,10 +20,10 @@ public class BrickTemplateReport {
 	 * 
 	 */
 	public BrickTemplateReport() {
-		table = new BrickInventoryTable(true);
+		this.table = new BrickInventoryTable(true);
 		JFreeReportBoot.getInstance().start();
 	}
-	
+
 	/**
 	 * Parses a report and displays a non-modal preview dialog.
 	 * 
@@ -37,7 +37,8 @@ public class BrickTemplateReport {
 			report.setData(this.table);
 
 			final PreviewDialog frame = new PreviewDialog(report);
-			frame.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
+			frame
+					.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
 			frame.pack();
 			RefineryUtilities.positionFrameRandomly(frame);
 			frame.setVisible(true);
@@ -45,9 +46,9 @@ public class BrickTemplateReport {
 			// throw new ReportDefinitionException("Parsing failed", e);
 		}
 	}
-	
+
 	public BrickInventoryTable getTable() {
-		return table;
+		return this.table;
 	}
 
 	public void setTable(BrickInventoryTable table) {

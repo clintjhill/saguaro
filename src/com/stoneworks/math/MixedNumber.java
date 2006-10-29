@@ -30,22 +30,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 /**
-*
-*/
+ *
+ */
 package com.stoneworks.math;
 
 /**
  * @author clinthill
- *
+ * 
  */
 public class MixedNumber {
 	/**
 	 * Default Constructor
-	 *
+	 * 
 	 */
 	public MixedNumber() {
-		
+
 	}
+
 	/**
 	 * Constructor that sets a MixedNumber through a decimal value
 	 * 
@@ -99,7 +100,7 @@ public class MixedNumber {
 			return (double) ((this.wholeNumber * this.denominator) + this.numerator)
 					/ this.denominator;
 		} else {
-			return (double) this.wholeNumber;
+			return this.wholeNumber;
 		}
 	}
 
@@ -118,8 +119,8 @@ public class MixedNumber {
 	 * 
 	 * @param obj
 	 *            Object to compare against
-	 * @return boolean value determining whether or not all values are equal for this instance
-	 *         (wholeNumber,denominator,numerator)
+	 * @return boolean value determining whether or not all values are equal for
+	 *         this instance (wholeNumber,denominator,numerator)
 	 */
 	/*
 	 * (non-Javadoc)
@@ -128,19 +129,23 @@ public class MixedNumber {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null)
+		if (obj == null) {
 			return false;
-		if (obj == this)
+		}
+		if (obj == this) {
 			return true;
+		}
 		if (!(obj instanceof MixedNumber)) {
 			return false;
 		}
 		MixedNumber other = (MixedNumber) obj;
 		// quick check for the double value
-		if (this.doubleValue == other.doubleValue)
+		if (this.doubleValue == other.doubleValue) {
 			return true;
+		}
 		// otherwise compare the other values
-		return other.wholeNumber == this.wholeNumber && other.numerator == this.numerator
+		return other.wholeNumber == this.wholeNumber
+				&& other.numerator == this.numerator
 				&& other.denominator == this.denominator;
 	}
 
@@ -222,7 +227,8 @@ public class MixedNumber {
 	public String toString() {
 		if (this.numerator > 0 && this.denominator > 0) {
 			if (this.wholeNumber > 0) {
-				return this.wholeNumber + " " + this.numerator + "/" + this.denominator;
+				return this.wholeNumber + " " + this.numerator + "/"
+						+ this.denominator;
 			} else {
 				return this.numerator + "/" + this.denominator;
 			}

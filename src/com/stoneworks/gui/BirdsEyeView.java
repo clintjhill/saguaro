@@ -53,58 +53,62 @@ public class BirdsEyeView extends PCanvas implements PropertyChangeListener {
 
 		this.addMouseMotionListener(new MouseMotionAdapter() {
 
+			@Override
 			public void mouseMoved(MouseEvent e) {
-				setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+				BirdsEyeView.this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 			}
-			
+
 		});
 		// create the PropertyChangeListener for listening to the viewed
 		// canvas
-		changeListener = new PropertyChangeListener() {
+		this.changeListener = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				updateFromViewed();
+				BirdsEyeView.this.updateFromViewed();
 			}
 		};
 
 		// create the coverage node
-		areaVisiblePNode = new P3DRect();
-		areaVisiblePNode.setPaint(new Color(128, 128, 255));
-		areaVisiblePNode.setTransparency(.6f);
-		areaVisiblePNode.setBounds(0, 0, 100, 100);
-		getCamera().addChild(areaVisiblePNode);
+		this.areaVisiblePNode = new P3DRect();
+		this.areaVisiblePNode.setPaint(new Color(128, 128, 255));
+		this.areaVisiblePNode.setTransparency(.6f);
+		this.areaVisiblePNode.setBounds(0, 0, 100, 100);
+		this.getCamera().addChild(this.areaVisiblePNode);
 
 		// add the drag event handler
-		getCamera().addInputEventListener(new PDragSequenceEventHandler() {
+		this.getCamera().addInputEventListener(new PDragSequenceEventHandler() {
+			@Override
 			protected void startDrag(PInputEvent e) {
-				if (e.getPickedNode() == areaVisiblePNode)
+				if (e.getPickedNode() == BirdsEyeView.this.areaVisiblePNode) {
 					super.startDrag(e);
+				}
 			}
 
+			@Override
 			protected void drag(PInputEvent e) {
 				PDimension dim = e.getDelta();
-				viewedCanvas.getCamera().translateView(0 - dim.getWidth(),
+				BirdsEyeView.this.viewedCanvas.getCamera().translateView(0 - dim.getWidth(),
 						0 - dim.getHeight());
 			}
 
 		});
 
 		// remove Pan and Zoom
-		removeInputEventListener(getPanEventHandler());
-		removeInputEventListener(getZoomEventHandler());
+		this.removeInputEventListener(this.getPanEventHandler());
+		this.removeInputEventListener(this.getZoomEventHandler());
 
-		setDefaultRenderQuality(PPaintContext.LOW_QUALITY_RENDERING);
+		this.setDefaultRenderQuality(PPaintContext.LOW_QUALITY_RENDERING);
 
 	}
 
 	public void connect(PCanvas canvas, PLayer[] viewed_layers) {
 
 		this.viewedCanvas = canvas;
-		layerCount = 0;
+		this.layerCount = 0;
 
-		viewedCanvas.getCamera().addPropertyChangeListener(changeListener);
+		this.viewedCanvas.getCamera().addPropertyChangeListener(this.changeListener);
 
-		for (layerCount = 0; layerCount < viewed_layers.length; ++layerCount) {
-			getCamera().addLayer(layerCount, viewed_layers[layerCount]);
+		for (this.layerCount = 0; this.layerCount < viewed_layers.length; ++this.layerCount) {
+			this.getCamera().addLayer(this.layerCount, viewed_layers[this.layerCount]);
 		}
 
 	}
@@ -113,16 +117,16 @@ public class BirdsEyeView extends PCanvas implements PropertyChangeListener {
 	 * Add a layer to list of viewed layers
 	 */
 	public void addLayer(PLayer new_layer) {
-		getCamera().addLayer(new_layer);
-		layerCount++;
+		this.getCamera().addLayer(new_layer);
+		this.layerCount++;
 	}
 
 	/**
 	 * Remove the layer from the viewed layers
 	 */
 	public void removeLayer(PLayer old_layer) {
-		getCamera().removeLayer(old_layer);
-		layerCount--;
+		this.getCamera().removeLayer(old_layer);
+		this.layerCount--;
 	}
 
 	/**
@@ -130,10 +134,10 @@ public class BirdsEyeView extends PCanvas implements PropertyChangeListener {
 	 * remove all layers
 	 */
 	public void disconnect() {
-		viewedCanvas.getCamera().removePropertyChangeListener(changeListener);
+		this.viewedCanvas.getCamera().removePropertyChangeListener(this.changeListener);
 
-		for (int i = 0; i < getCamera().getLayerCount(); ++i) {
-			getCamera().removeLayer(i);
+		for (int i = 0; i < this.getCamera().getLayerCount(); ++i) {
+			this.getCamera().removeLayer(i);
 		}
 
 	}
@@ -142,7 +146,7 @@ public class BirdsEyeView extends PCanvas implements PropertyChangeListener {
 	 * This method will get called when the viewed canvas changes
 	 */
 	public void propertyChange(PropertyChangeEvent event) {
-		updateFromViewed();
+		this.updateFromViewed();
 	}
 
 	/**
@@ -156,14 +160,14 @@ public class BirdsEyeView extends PCanvas implements PropertyChangeListener {
 		double viewedHeight;
 		double viewedWidth;
 
-		double ul_camera_x = viewedCanvas.getCamera().getViewBounds().getX();
-		double ul_camera_y = viewedCanvas.getCamera().getViewBounds().getY();
+		double ul_camera_x = this.viewedCanvas.getCamera().getViewBounds().getX();
+		double ul_camera_y = this.viewedCanvas.getCamera().getViewBounds().getY();
 		double lr_camera_x = ul_camera_x
-				+ viewedCanvas.getCamera().getViewBounds().getWidth();
+				+ this.viewedCanvas.getCamera().getViewBounds().getWidth();
 		double lr_camera_y = ul_camera_y
-				+ viewedCanvas.getCamera().getViewBounds().getHeight();
+				+ this.viewedCanvas.getCamera().getViewBounds().getHeight();
 
-		Rectangle2D drag_bounds = getCamera().getUnionOfLayerFullBounds();
+		Rectangle2D drag_bounds = this.getCamera().getUnionOfLayerFullBounds();
 
 		double ul_layer_x = drag_bounds.getX();
 		double ul_layer_y = drag_bounds.getY();
@@ -173,38 +177,42 @@ public class BirdsEyeView extends PCanvas implements PropertyChangeListener {
 		// find the upper left corner
 
 		// set to the lesser value
-		if (ul_camera_x < ul_layer_x)
+		if (ul_camera_x < ul_layer_x) {
 			viewedX = ul_layer_x;
-		else
+		} else {
 			viewedX = ul_camera_x;
+		}
 
 		// same for y
-		if (ul_camera_y < ul_layer_y)
+		if (ul_camera_y < ul_layer_y) {
 			viewedY = ul_layer_y;
-		else
+		} else {
 			viewedY = ul_camera_y;
+		}
 
 		// find the lower right corner
 
 		// set to the greater value
-		if (lr_camera_x < lr_layer_x)
+		if (lr_camera_x < lr_layer_x) {
 			viewedWidth = lr_camera_x - viewedX;
-		else
+		} else {
 			viewedWidth = lr_layer_x - viewedX;
+		}
 
 		// same for height
-		if (lr_camera_y < lr_layer_y)
+		if (lr_camera_y < lr_layer_y) {
 			viewedHeight = lr_camera_y - viewedY;
-		else
+		} else {
 			viewedHeight = lr_layer_y - viewedY;
+		}
 
 		Rectangle2D bounds = new Rectangle2D.Double(viewedX, viewedY,
 				viewedWidth, viewedHeight);
-		bounds = getCamera().viewToLocal(bounds);
-		areaVisiblePNode.setBounds(bounds);
+		bounds = this.getCamera().viewToLocal(bounds);
+		this.areaVisiblePNode.setBounds(bounds);
 
 		// keep the birds eye view centered
-		getCamera().animateViewToCenterBounds(drag_bounds, true, 0);
+		this.getCamera().animateViewToCenterBounds(drag_bounds, true, 0);
 
 	}
 

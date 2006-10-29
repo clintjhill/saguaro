@@ -39,7 +39,8 @@ public class ConstructionReport {
 			JFreeReport report = generator.parseReport(url);
 			report.setData(new ConstructionTable());
 			final PreviewDialog frame = new PreviewDialog(report);
-			frame.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
+			frame
+					.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
 			frame.pack();
 			RefineryUtilities.positionFrameRandomly(frame);
 			frame.setVisible(true);

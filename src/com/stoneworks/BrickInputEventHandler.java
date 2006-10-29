@@ -38,28 +38,30 @@ class BrickInputEventHandler extends PBasicInputEventHandler {
 			remove.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					BrickCanvas.getInstance().removeBrick(brick);
+					BrickCanvas.getInstance().removeBrick(BrickInputEventHandler.this.brick);
 				}
 
 			});
 			popUp.add(remove);
-			if (brick.getUndoManager().canUndo()) {
-				javax.swing.JMenuItem undo = new javax.swing.JMenuItem("Undo " + brick.getUndoManager().getPresentationName());
+			if (this.brick.getUndoManager().canUndo()) {
+				javax.swing.JMenuItem undo = new javax.swing.JMenuItem("Undo "
+						+ this.brick.getUndoManager().getPresentationName());
 				undo.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
-						brick.getUndoManager().undo();
+						BrickInputEventHandler.this.brick.getUndoManager().undo();
 					}
 
 				});
 				popUp.add(undo);
 			}
-			if (brick.getUndoManager().canRedo()) {
-				javax.swing.JMenuItem redo = new javax.swing.JMenuItem("Redo " + brick.getUndoManager().getPresentationName());
+			if (this.brick.getUndoManager().canRedo()) {
+				javax.swing.JMenuItem redo = new javax.swing.JMenuItem("Redo "
+						+ this.brick.getUndoManager().getPresentationName());
 				redo.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent e) {
-						brick.getUndoManager().redo();
+						BrickInputEventHandler.this.brick.getUndoManager().redo();
 					}
 
 				});
@@ -76,7 +78,7 @@ class BrickInputEventHandler extends PBasicInputEventHandler {
 	public void mouseEntered(PInputEvent event) {
 		super.mouseEntered(event);
 		PPath node = (PPath) event.getPickedNode();
-		currentColor = node.getStrokePaint();
+		this.currentColor = node.getStrokePaint();
 		node.setStrokePaint(java.awt.Color.RED);
 	}
 
@@ -84,7 +86,7 @@ class BrickInputEventHandler extends PBasicInputEventHandler {
 	public void mouseExited(PInputEvent event) {
 		super.mouseExited(event);
 		PPath node = (PPath) event.getPickedNode();
-		node.setStrokePaint(currentColor);
+		node.setStrokePaint(this.currentColor);
 	}
 
 	@Override

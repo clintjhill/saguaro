@@ -12,7 +12,7 @@ import com.stoneworks.report.BrickTemplateReport;
 
 /**
  * @author clinthill
- *
+ * 
  */
 public class TemplateReportAction extends AbstractAction {
 
@@ -28,17 +28,19 @@ public class TemplateReportAction extends AbstractAction {
 		super();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 		BrickTemplateReport report = new BrickTemplateReport();
-		for (Brick b : canvas.getBricks()) {
+		for (Brick b : this.canvas.getBricks()) {
 			report.getTable().addBrick(b);
 		}
 		report.executeReport();
 	}
 
-
-	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas.getInstance();
+	private com.stoneworks.BrickCanvas canvas = com.stoneworks.BrickCanvas
+			.getInstance();
 }

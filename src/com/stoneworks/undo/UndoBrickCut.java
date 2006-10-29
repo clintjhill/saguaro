@@ -30,13 +30,16 @@ public class UndoBrickCut extends AbstractUndoableEdit {
 	 * @param o
 	 * @param n
 	 */
-	public UndoBrickCut(com.stoneworks.Brick b, java.awt.geom.Area o, java.awt.geom.Area n) {
+	public UndoBrickCut(com.stoneworks.Brick b, java.awt.geom.Area o,
+			java.awt.geom.Area n) {
 		this.brick = b;
 		this.originalShape = o;
 		this.newShape = n;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.undo.AbstractUndoableEdit#getPresentationName()
 	 */
 	@Override
@@ -44,7 +47,9 @@ public class UndoBrickCut extends AbstractUndoableEdit {
 		return "Brick cut";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.undo.AbstractUndoableEdit#redo()
 	 */
 	@Override
@@ -53,7 +58,9 @@ public class UndoBrickCut extends AbstractUndoableEdit {
 		this.brick.setPathTo(this.newShape);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.undo.AbstractUndoableEdit#undo()
 	 */
 	@Override

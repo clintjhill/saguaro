@@ -26,7 +26,7 @@ public class BrickReportElement extends JComponent {
 	}
 
 	public com.stoneworks.Brick getBrick() {
-		return brick;
+		return this.brick;
 	}
 
 	@Override

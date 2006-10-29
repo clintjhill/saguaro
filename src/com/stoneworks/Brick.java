@@ -30,8 +30,9 @@ public class Brick extends PPath implements Cuttable, Transferable {
 			+ ";class=com.stoneworks.Brick";
 
 	public static final String PROPERTY_CUT = "cut";
-    public static final int PROPERTY_CODE_CUT = 1 << 19;
-    
+
+	public static final int PROPERTY_CODE_CUT = 1 << 19;
+
 	/**
 	 * 
 	 */
@@ -41,7 +42,7 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	 * 
 	 */
 	public Brick() {
-		initialize();
+		this.initialize();
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	 */
 	public Brick(Shape s) {
 		super(s);
-		initialize();
+		this.initialize();
 	}
 
 	/**
@@ -59,8 +60,8 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	 */
 	public Brick(Shape s, Color c) {
 		super(s);
-		initialize();
-		setColor(c);
+		this.initialize();
+		this.setColor(c);
 	}
 
 	/**
@@ -69,22 +70,26 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	 */
 	public Brick(Shape sh, Stroke st) {
 		super(sh, st);
-		initialize();
+		this.initialize();
 	}
 
 	public void cut(Shape s) {
-		java.awt.geom.Area originalArea = new java.awt.geom.Area(getPathReference());
-		java.awt.geom.Area original = (java.awt.geom.Area)originalArea.clone();
-		originalArea.transform(getTransform());
+		java.awt.geom.Area originalArea = new java.awt.geom.Area(
+				this.getPathReference());
+		java.awt.geom.Area original = (java.awt.geom.Area) originalArea.clone();
+		originalArea.transform(this.getTransform());
 		java.awt.geom.Area otherArea = new java.awt.geom.Area(s);
 		if (originalArea.intersects(otherArea.getBounds2D())) {
 			originalArea.subtract(otherArea);
-			java.awt.geom.Area newArea = originalArea.createTransformedArea(this
-					.getInverseTransform());
+			java.awt.geom.Area newArea = originalArea
+					.createTransformedArea(this.getInverseTransform());
 			this.setPathTo(newArea);
-			com.stoneworks.undo.UndoBrickCut edit = new com.stoneworks.undo.UndoBrickCut(this,original,newArea);
+			com.stoneworks.undo.UndoBrickCut edit = new com.stoneworks.undo.UndoBrickCut(
+					this, original, newArea);
 			this.undoManager.addEdit(edit);
-			this.firePropertyChange(PROPERTY_CODE_CUT, PROPERTY_CUT, null, this);
+			this
+					.firePropertyChange(PROPERTY_CODE_CUT, PROPERTY_CUT, null,
+							this);
 		}
 	}
 
@@ -93,17 +98,17 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	 * @return java.awt.Color
 	 */
 	public java.awt.Color getColor() {
-		return color;
+		return this.color;
 	}
 
 	public Shape getCuttable() {
-		return getPathReference();
+		return this.getPathReference();
 	}
 
 	public javax.swing.undo.UndoManager getUndoManager() {
 		return this.undoManager;
 	}
-	
+
 	public String getDescription() {
 		PathIterator path = this.getPathReference().getPathIterator(null);
 		String description = "";
@@ -133,11 +138,12 @@ public class Brick extends PPath implements Cuttable, Transferable {
 				break;
 			case PathIterator.SEG_CLOSE:
 				double finalDistance = firstPoint.distance(origination);
-				if(finalDistance > 0) {
+				if (finalDistance > 0) {
 					description = description.concat(StandardMeasurement
 							.createForInches(finalDistance).toString());
 				} else {
-					description = description.substring(0, description.lastIndexOf(","));
+					description = description.substring(0, description
+							.lastIndexOf(","));
 				}
 				break;
 			}
@@ -149,7 +155,7 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	public Object getTransferData(DataFlavor flavor)
 			throws UnsupportedFlavorException, IOException {
 		if (this.isDataFlavorSupported(flavor)) {
-			Brick copy = new Brick((Shape)this.getPathReference().clone());
+			Brick copy = new Brick((Shape) this.getPathReference().clone());
 			copy.setColor(this.color);
 			return copy;
 		} else {
@@ -169,8 +175,8 @@ public class Brick extends PPath implements Cuttable, Transferable {
 	}
 
 	private void initialize() {
-		setStrokePaint(java.awt.Color.gray);
-		addInputEventListener(new BrickInputEventHandler(this));
+		this.setStrokePaint(java.awt.Color.gray);
+		this.addInputEventListener(new BrickInputEventHandler(this));
 		this.undoManager = new javax.swing.undo.UndoManager();
 	}
 
@@ -191,8 +197,12 @@ public class Brick extends PPath implements Cuttable, Transferable {
 		this.color = color;
 		this.setPaint(color);
 	}
+	
+	public void setColorForReport(java.awt.Color color) {
+		this.setPaint(color);
+	}
 
 	private java.awt.Color color = null;
-	
+
 	private javax.swing.undo.UndoManager undoManager = null;
 }
