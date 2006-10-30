@@ -68,9 +68,9 @@ public class BackgroundImage extends PImage {
 		super.paint(pc);
 		Graphics2D g2D = pc.getGraphics();
 		g2D.setColor(java.awt.Color.black);
-		String width = com.stoneworks.math.StandardMeasurement.createForFeet(
+		String width = com.stoneworks.math.StandardMeasurement.feetFromScreen(
 				this.getWidth()).toString();
-		String height = com.stoneworks.math.StandardMeasurement.createForFeet(
+		String height = com.stoneworks.math.StandardMeasurement.feetFromScreen(
 				this.getHeight()).toString();
 		g2D.drawString("Dimensions: " + width + " x " + height, 5, -8);
 	}

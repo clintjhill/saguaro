@@ -132,7 +132,7 @@ public class Brick extends PPath implements Cuttable, Transferable {
 				secondPoint = new Point2D.Float(x, y);
 				double distance = firstPoint.distance(secondPoint);
 				description = description.concat(StandardMeasurement
-						.createForInches(distance).toString()
+						.inchesFromScreen(distance).toString()
 						+ ", ");
 				firstPoint = secondPoint;
 				break;
@@ -140,7 +140,7 @@ public class Brick extends PPath implements Cuttable, Transferable {
 				double finalDistance = firstPoint.distance(origination);
 				if (finalDistance > 0) {
 					description = description.concat(StandardMeasurement
-							.createForInches(finalDistance).toString());
+							.inchesFromScreen(finalDistance).toString());
 				} else {
 					description = description.substring(0, description
 							.lastIndexOf(","));

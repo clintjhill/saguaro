@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
-import com.stoneworks.math.MixedNumber;
 import com.stoneworks.math.StandardMeasurement;
 
 /**
@@ -71,17 +70,16 @@ public class MeasurementPanel extends JPanel {
 			int numerator = Integer.valueOf(this.getNumerator().getText());
 			int denominator = Integer.valueOf(this.getDenominator().getText());
 			if (whole > 0) {
-				if (denominator > numerator) {
-					return new StandardMeasurement(0, new MixedNumber(whole,
-							numerator, denominator));
+				if (denominator > numerator && numerator > 0) {
+					return new StandardMeasurement(0, whole,numerator, denominator);
 				} else {
-					return new StandardMeasurement(0, whole);
+					return new StandardMeasurement(0, whole, 0, 0);
 				}
 			}
 			return null;
 		} else if (this.getWholeNumber().getValue() != null) {
 			int whole = Integer.valueOf(this.getWholeNumber().getText());
-			return new StandardMeasurement(0, whole);
+			return new StandardMeasurement(0, whole, 0, 0);
 		} else {
 			return null;
 		}

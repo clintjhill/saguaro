@@ -78,15 +78,11 @@ public class BrickManager extends JPanel {
 			this.addBrick.setText("Add Brick");
 			this.addBrick.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					StandardMeasurement width = BrickManager.this.getWidthMeasurement()
-							.getMeasurement();
-					StandardMeasurement length = BrickManager.this.getLengthMeasurement()
-							.getMeasurement();
-					java.awt.geom.Rectangle2D rect = new java.awt.geom.Rectangle2D.Double(
-							0, 0, width.screenValue(), length.screenValue());
+					StandardMeasurement width = BrickManager.this.getWidthMeasurement().getMeasurement();
+					StandardMeasurement length = BrickManager.this.getLengthMeasurement().getMeasurement();
+					java.awt.geom.Rectangle2D rect = new java.awt.geom.Rectangle2D.Double(0, 0, width.screenValue(), length.screenValue());
 					java.awt.geom.Area shape = new java.awt.geom.Area(rect);
-					com.stoneworks.Brick brick = new com.stoneworks.Brick(
-							shape, BrickManager.this.getColorPanel().getBackground());
+					com.stoneworks.Brick brick = new com.stoneworks.Brick(shape, BrickManager.this.getColorPanel().getBackground());
 					if (!BrickManager.this.getCutList().contains(brick)) {
 						BrickManager.this.getCutList().addElement(brick);
 					}

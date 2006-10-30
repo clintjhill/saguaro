@@ -44,81 +44,102 @@ package com.stoneworks.math;
 public class StandardMeasurement {
 
 	/**
-	 * Returns a <code>StandardMeasurement</code> that only contains a
-	 * measurement value for inches. This method will convert the inches value
-	 * passed in from a screen value. Divides inches by 6 before creating the
-	 * StandardMeasurement
-	 * 
-	 * @param inches
-	 * @return StandardMeasurement
-	 */
-	public static StandardMeasurement createForInches(double inches) {
-		return new StandardMeasurement(0, new MixedNumber(inches / 6));
-	}
-
-	/**
 	 * Returns a <code>StandardMeasurement</code> that contains a measurement
 	 * which includes a value for feet. This method will convert the inches
-	 * value passed in from a screen value. Divides inches by 6 before creating
+	 * value passed in from a screen value. Divides inches by SCREEN before creating
 	 * the StandardMeasurement
 	 * 
 	 * @param feet
 	 * @return StandardMeasurement
 	 */
-	public static StandardMeasurement createForFeet(double feet) {
-		StandardMeasurement standard = new StandardMeasurement(feet / 6);
-		return standard;
+	public static StandardMeasurement feetFromScreen(double feet) {
+		// be sure to divide by six to convert from screen
+		ComplexNumber feetComplex = new ComplexNumber(feet/SCREEN);
+		int feetValue = feetComplex.getWhole();
+		double inches = feetComplex.getRemainder() * 12;
+		ComplexNumber inchesComplex = new ComplexNumber(inches);
+		int wholeValue = inchesComplex.getWhole();
+		int numeratorValue = (int)java.lang.Math.round(inchesComplex.getRemainder()*32);
+		return new StandardMeasurement(feetValue,wholeValue,numeratorValue,32);
 	}
 
 	/**
-	 * Default Constructor
+	 * Returns a <code>StandardMeasurement</code> that only contains a
+	 * measurement value for inches. This method will convert the inches value
+	 * passed in from a screen value. Divides inches by SCREEN before creating the
+	 * StandardMeasurement
+	 * 
+	 * @param inches
+	 * @return StandardMeasurement
 	 */
-	public StandardMeasurement() {
+	public static StandardMeasurement inchesFromScreen(double inches) {
+		// be sure to divide by six to convert from screen
+		double inchesValue = (inches/SCREEN) * 12;	
+		ComplexNumber inchesComplex = new ComplexNumber(inchesValue);
+		int wholeValue = inchesComplex.getWhole();
+		int numeratorValue = (int)java.lang.Math.round(inchesComplex.getRemainder()*32);
+		return new StandardMeasurement(0,wholeValue,numeratorValue,32);
 	}
 
+	private int denominator = 0;
+
+	private int feet = 0;
+
+	private int numerator = 0;
+
+	private int whole = 0;
+	
+	public static int SCREEN = 72;
+	
+	public static int PRINT = 72;
+
 	/**
-	 * Constructor that initializes feet and inches. Inches is set as a whole
-	 * number.
 	 * 
 	 * @param feet
-	 * @param inches
+	 * @param whole
+	 * @param numerator
+	 * @param denominator
 	 */
-	public StandardMeasurement(int feet, int inches) {
+	public StandardMeasurement(int feet, int whole, int numerator, int denominator) {
 		this.feet = feet;
-		this.inches = new MixedNumber(inches, 0, 0);
+		this.whole = whole;
+		this.numerator = numerator;
+		this.denominator = denominator;
 	}
-
+	
 	/**
-	 * Constructor that initializes feet and inches
+	 * Returns the double value of this measurement. The value is based on 12
+	 * inches in a foot and the inches in the form of a double value.
 	 * 
-	 * @param feet
-	 *            int value of feet for measurement
-	 * @param inches
-	 *            {@link MixedNumber} value of inches
-	 */
-	public StandardMeasurement(int feet, MixedNumber inches) {
-		this.feet = feet;
-		this.inches = inches;
-	}
-
-	/**
-	 * Constructor that will calculate feet and inches from a double value.
+	 * feet * 12 + inches.doubleValue;
 	 * 
-	 * @param measure
+	 * @return double
 	 */
-	private StandardMeasurement(double measure) {
-		ComplexNumber complexNumber = new ComplexNumber(measure);
-		// if the whole number is greater than twelve we need to handle the
-		// feet measurement of this instance
-		if (complexNumber.getWhole() > 12) {
-			this.feet = complexNumber.getWhole() / 12;
-			int inchRemainder = complexNumber.getWhole() - (this.feet * 12);
-			double inchesResult = inchRemainder + complexNumber.getRemainder();
-			this.inches = new MixedNumber(inchesResult);
-		} else { // the whole number is less than twelve so the value is all
-					// inches
-			this.inches = new MixedNumber(measure);
+	public double doubleValue() {
+		double result = 0.0D;
+		double fraction = 0.0D;
+		result += this.feet;
+		if(this.whole > 0) {
+			if(this.denominator > 0 && this.numerator > 0 && this.numerator < this.denominator ) {
+				fraction = (((double)this.whole*(double)this.denominator)+(double)this.numerator)/this.denominator;
+				result += fraction/12;
+			} else {
+				result += (double)this.whole/12;
+			}
+		} else {
+			if(this.denominator > 0 && this.numerator > 0 && this.numerator < this.denominator) {
+				fraction = (this.numerator/this.denominator)/12;
+				result += fraction;
+			}
 		}
+		return result;
+	}
+
+	/**
+	 * @return the denominator
+	 */
+	public int getDenominator() {
+		return denominator;
 	}
 
 	/**
@@ -131,12 +152,43 @@ public class StandardMeasurement {
 	}
 
 	/**
-	 * Returns the inches value for this measurement
-	 * 
-	 * @return the inches
+	 * @return the numerator
 	 */
-	public MixedNumber getInches() {
-		return this.inches;
+	public int getNumerator() {
+		return numerator;
+	}
+
+	/**
+	 * @return the whole
+	 */
+	public int getWhole() {
+		return whole;
+	}
+
+	/**
+	 * Returns the double value of this measurement for printing
+	 * 
+	 * @return double
+	 */
+	public double printValue() {
+		return this.doubleValue() * PRINT;
+	}
+
+	/**
+	 * Returns the double value of this measurement for the screen.
+	 * 
+	 * @return double
+	 */
+	public double screenValue() {
+		return this.doubleValue() * SCREEN;
+	}
+
+	/**
+	 * @param denominator
+	 *            the denominator to set
+	 */
+	public void setDenominator(int denominator) {
+		this.denominator = denominator;
 	}
 
 	/**
@@ -150,51 +202,20 @@ public class StandardMeasurement {
 	}
 
 	/**
-	 * Sets the inches value for this measurement
-	 * 
-	 * @param inches
-	 *            the inches to set
+	 * @param numerator
+	 *            the numerator to set
 	 */
-	public void setInches(MixedNumber inches) {
-		this.inches = inches;
+	public void setNumerator(int numerator) {
+		this.numerator = numerator;
 	}
 
 	/**
-	 * Returns the double value of this measurement. The value is based on 12
-	 * inches in a foot and the inches in the form of a double value.
-	 * 
-	 * feet * 12 + inches.doubleValue;
-	 * 
-	 * @return double
+	 * @param whole
+	 *            the whole to set
 	 */
-	public double doubleValue() {
-		double result = 0.0D;
-		result += this.feet * 12;
-		result += this.inches.doubleValue();
-		return result;
+	public void setWhole(int whole) {
+		this.whole = whole;
 	}
-
-	/**
-	 * Returns the double value of this measurement for the screen.
-	 * 
-	 * @return double
-	 */
-	public double screenValue() {
-		return this.doubleValue() * 6;
-	}
-
-	/**
-	 * Returns the double value of this measurement for printing
-	 * 
-	 * @return double
-	 */
-	public double printValue() {
-		return this.doubleValue() * 72;
-	}
-
-	private int feet = 0;
-
-	private MixedNumber inches = null;
 
 	/**
 	 * Returns this instance in a readable format
@@ -209,11 +230,18 @@ public class StandardMeasurement {
 	@Override
 	public String toString() {
 		String description = "";
-		if (this.feet <= 0) {
-			description = this.inches.toString() + "''";
+		if(this.feet > 0) description += this.feet+"'";
+		if(this.whole > 0) {
+			description += " "+this.whole;
+			if(this.denominator > 0 && this.numerator < this.denominator && this.numerator > 0) {
+				description += " "+this.numerator+"/"+this.denominator;
+			}
+			description += "\"";
 		} else {
-			description = String.valueOf(this.feet) + "' "
-					+ this.inches.toString() + "''";
+			if(this.denominator > 0 && this.numerator < this.denominator && this.numerator > 0) {
+				description += " "+this.numerator+"/"+this.denominator;
+			}
+			description += "\"";
 		}
 		return description;
 	}

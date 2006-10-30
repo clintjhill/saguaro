@@ -23,6 +23,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -35,9 +36,6 @@ import com.stoneworks.action.TemplateReportAction;
 import com.stoneworks.gui.BrickCanvasManager;
 import com.stoneworks.gui.BrickManager;
 import com.stoneworks.gui.ProjectManager;
-import javax.swing.JScrollPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 /**
  * @author clinthill
@@ -479,24 +477,16 @@ public class Application {
 	 * This method initializes aboutText	
 	 * 	
 	 * @return javax.swing.JEditorPane	
+	 * @throws IOException 
 	 */
 	private JEditorPane getAboutText() {
 		if (aboutText == null) {
-			aboutText = new JEditorPane();
+			try {
+				aboutText = new JEditorPane(this.getClass().getResource("about-dialog.htm"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			aboutText.setContentType("text/html");
-			aboutText.setText("<html> <body id=\"about-dialog\"> \t<table border=\"0\" cellspacing=\"5\" cellpadding=\"5\"> \t\t<tr><th>Sagauro Stoneworks - Brick Mosaic Tool</th></tr> \t\t<tr><td>Developed by <a href=\"http://www.h3osoftware.com\">H3O Software</a> \t\t\t<p>Copyright (c) 2005, H3O Software LLC \t\t\tAll rights reserved.</p></td></tr> \t\t<tr> \t\t\t<td>Some portions of code used open source libraries. Credits: \t\t\t<ul> \t\t\t\t<li><a href=\"http://www.jfree.org/jfreereport/index.php\">JFreeReport</a></li> \t\t\t\t<li><a href=\"http://www.cs.umd.edu/hcil/jazz/\">Piccolo</a></li> \t\t\t\t<li><a href=\"https://substance.dev.java.net/\">Substance</a></li> \t\t\t\t<li><a href=\"http://www.extreme.indiana.edu/xgws/xsoap/xpp/mxp1/index.html\">Xpp3</a></li> \t\t\t\t<li><a href=\"http://xstream.codehaus.org/\">XStream</a></li> \t\t\t</ul> \t\t\t \t\t\t</td> \t\t</tr> \t</table> </body> </html>");
-			aboutText.addHyperlinkListener(new HyperlinkListener() {
-
-				public void hyperlinkUpdate(HyperlinkEvent e) {
-					try {
-						aboutText.setPage(e.getURL());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				
-			});
 		}
 		return aboutText;
 	}
