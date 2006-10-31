@@ -233,16 +233,29 @@ public class StandardMeasurement {
 		if(this.feet > 0) description += this.feet+"'";
 		if(this.whole > 0) {
 			description += " "+this.whole;
-			if(this.denominator > 0 && this.numerator < this.denominator && this.numerator > 0) {
-				description += " "+this.numerator+"/"+this.denominator;
-			}
+			description += fraction();
 			description += "\"";
 		} else {
-			if(this.denominator > 0 && this.numerator < this.denominator && this.numerator > 0) {
-				description += " "+this.numerator+"/"+this.denominator;
-			}
+			description += fraction();
 			description += "\"";
 		}
 		return description;
+	}
+	
+	private String fraction() {
+		String fraction = "";
+		int scaledNumerator = this.numerator;
+		int scaledDenominator = this.denominator;
+		if(scaledDenominator > 0 && scaledNumerator < scaledDenominator && scaledNumerator > 0) {
+			for(int i = 2; i < scaledDenominator; i*=2) {
+				if((scaledNumerator%i) == 0) {
+					scaledNumerator = scaledNumerator/i;
+					scaledDenominator = scaledDenominator/i;
+					i = 1;
+				}
+			}
+			fraction += " "+scaledNumerator+"/"+scaledDenominator;
+		}
+		return fraction;
 	}
 }
