@@ -46,11 +46,11 @@ public class BackgroundImageConverter implements Converter {
 		writer.startNode("imageFilePath");
 		context.convertAnother(image.getFilePath());
 		writer.endNode();
-		writer.startNode("imageTransform");
-		context.convertAnother(image.getTransform());
-		writer.endNode();
 		writer.startNode("imageBounds");
 		context.convertAnother(image.getBounds().getBounds());
+		writer.endNode();
+		writer.startNode("imageTransform");
+		context.convertAnother(image.getTransform());
 		writer.endNode();
 	}
 
@@ -68,13 +68,13 @@ public class BackgroundImageConverter implements Converter {
 			if (reader.getNodeName().equals("imageFilePath")) {
 				image = new BackgroundImage(reader.getValue());
 			}
-			if (image != null && reader.getNodeName().equals("imageTransform")) {
-				image.setTransform((AffineTransform) context.convertAnother(
-						reader, AffineTransform.class));
-			}
 			if (image != null && reader.getNodeName().equals("imageBounds")) {
 				image.setBounds((Rectangle) context.convertAnother(reader,
 						Rectangle.class));
+			}
+			if (image != null && reader.getNodeName().equals("imageTransform")) {
+				image.setTransform((AffineTransform) context.convertAnother(
+						reader, AffineTransform.class));
 			}
 			reader.moveUp();
 		}
